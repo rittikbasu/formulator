@@ -1,118 +1,198 @@
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { Inter } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"] });
+const Drivers = () => {
+  const [teams, setTeams] = useState({});
+  const [loading, setLoading] = useState(true);
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
 
-export default function Home() {
+  const handleYearChange = (event) => {
+    setSelectedYear(event.target.value);
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (selectedYear === currentYear) {
+      fetchDriversData("latest");
+    } else {
+      fetch(
+        `https://api.openf1.org/v1/sessions?session_name=Race&year=${selectedYear}`
+      )
+        .then((response) => response.json())
+        .then((sessionsData) => {
+          const lastSession = sessionsData[sessionsData.length - 1];
+          const sessionKey = lastSession.session_key;
+          const countryName = lastSession.country_name;
+          return fetchDriversData(sessionKey);
+        })
+        .catch((error) => {
+          console.error("Error fetching session data:", error);
+          setLoading(false);
+        });
+    }
+  }, [selectedYear, currentYear]);
+
+  function fetchDriversData(sessionKey) {
+    fetch(`https://api.openf1.org/v1/drivers?session_key=${sessionKey}`)
+      .then((response) => response.json())
+      .then((driversData) => {
+        console.log(driversData);
+        const groupedByTeam = driversData.reduce((acc, driver) => {
+          (acc[driver.team_name] = acc[driver.team_name] || []).push(driver);
+          return acc;
+        }, {});
+        const sortedTeams = Object.keys(groupedByTeam)
+          .sort()
+          .reduce((acc, key) => {
+            acc[key] = groupedByTeam[key];
+            return acc;
+          }, {});
+        setTeams(sortedTeams);
+      })
+      .catch((error) => {
+        console.error("Error fetching drivers data:", error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }
+
+  const SkeletonCard = () => (
+    <div className="max-w-sm rounded-3xl overflow-hidden shadow-lg m-4 bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[200px] animate-pulse"></div>
+  );
+
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
+    <div>
+      <div className="flex justify-center md:my-16 my-8">
         <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
+          src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
+          alt="F1 logo"
+          height={100}
+          width={200}
+          unoptimized={true}
         />
       </div>
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className="max-w-sm mx-auto p-8">
+        <div className="flex">
+          <label htmlFor="year" className="sr-only">
+            Choose a year
+          </label>
+          <select
+            id="year"
+            className="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center rounded-s-xl bg-zinc-900 border border-zinc-800 outline-none"
+            defaultValue="2024"
+            onChange={handleYearChange}
+          >
+            <option value="2024">2024</option>
+            <option value="2023">2023</option>
+            <option value="2022">2022</option>
+            <option value="2021">2021</option>
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+          </select>
+          <label htmlFor="teams" className="sr-only">
+            Choose a team
+          </label>
+          <select
+            id="teams"
+            className="bg-zinc-900 block w-full p-2.5 text-sm rounded-e-xl border-y border-r border-zinc-800 outline-none"
+            defaultValue="Teams"
+          >
+            <option value="teams">Teams</option>
+            <option value="races">Races</option>
+          </select>
+        </div>
       </div>
-    </main>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5 gap-4 md:mx-16 mx-4 justify-center">
+        {loading
+          ? Array.from({ length: 10 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))
+          : Object.entries(teams).map(([teamName, drivers]) => (
+              <div
+                key={teamName}
+                className="group max-w-sm rounded-3xl overflow-hidden shadow-lg m-4 bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[200px] flex flex-col justify-between relative"
+              >
+                <div
+                  className="absolute z-0 blur-3xl h-16 w-16 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                  style={{
+                    backgroundColor: `#${drivers[0].team_colour}`,
+                  }}
+                ></div>
+                <div className="group-hover:hidden block ">
+                  {/* Team name */}
+                  <div className="text-center py-4">
+                    <h2
+                      className="font-bold text-xl"
+                      style={{ color: `#${drivers[0].team_colour}` }}
+                    >
+                      {teamName}
+                    </h2>
+                  </div>
+                  {/* Team car image */}
+                  <div className="flex justify-center items-center h-full">
+                    <Image
+                      src={`https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/${selectedYear}/${teamName
+                        .replace(/\s+/g, "-")
+                        .toLowerCase()}.png.transform/6col-retina/image.png`}
+                      className="w-fit h-fit z-10"
+                      alt={`${teamName} team car`}
+                      height={200}
+                      width={200}
+                      unoptimized={true}
+                    />
+                  </div>
+                </div>
+                {/* Drivers information */}
+                <div className="hidden group-hover:flex flex-col items-stretch justify-center h-full px-8 gap-y-4 transition-opacity duration-700 ease-in-out">
+                  {drivers.map((driver, index) => (
+                    <div key={index} className="">
+                      <div className="flex justify-between">
+                        <div>
+                          <div className="font-bold text-lg mb-2">
+                            {driver.first_name}{" "}
+                            <span
+                              style={{ color: `#${driver.team_colour}` }}
+                              className="uppercase"
+                            >
+                              {driver.last_name}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2">
+                              #{driver.driver_number}
+                            </span>
+                            <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200">
+                              {driver.name_acronym}
+                            </span>
+                          </div>
+                        </div>
+                        {/* Driver image */}
+                        <div className="self-start">
+                          <Image
+                            src={
+                              driver.headshot_url ||
+                              "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png"
+                            }
+                            alt={`${driver.full_name}`}
+                            height={48}
+                            width={48}
+                            unoptimized={true}
+                            className="rounded-full outline outline-zinc-900"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+      </div>
+    </div>
   );
-}
+};
+
+export default Drivers;
