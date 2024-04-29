@@ -19,7 +19,7 @@ const Drivers = ({ circuits, year }) => {
                 className="max-w-sm mx-auto relative group"
               >
                 <div className="absolute z-0 blur-3xl h-20 w-20 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-1000 bg-red-500 group-hover:bg-blue-500"></div>
-                <div className="bg-zinc-900/50 backdrop-blur-sm p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
+                <div className="bg-zinc-900/50 backdrop-blur-sm webkit-backdrop-blur p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
                   <h3 className="text-zinc-200 text-lg mb-2">
                     <span className="uppercase font-bold text-red-500">
                       {circuitName}
