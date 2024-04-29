@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import Selector from "@/components/Selector";
 
-const Drivers = ({ teams, year }) => {
+const Teams = ({ teams, year }) => {
   return (
     <>
       <Head>
@@ -11,91 +11,92 @@ const Drivers = ({ teams, year }) => {
       </Head>
       <Selector year={year} category="teams" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12 mt-8 justify-center">
-        {Object.entries(teams).map(([teamName, drivers], index) => (
-          <div
-            key={teamName}
-            className="group max-w-sm rounded-3xl  shadow-lg backdrop-blur-sm bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative"
-            style={{ "--team-color": `#${drivers[0].team_colour}` }}
-          >
-            <div className="absolute -top-6 -left-5 p-2 text-3xl font-bold z-10 outline outline-zinc-900 rounded-full h-16 w-16 bg-black/40 text-zinc-700 flex items-center justify-center group-hover:text-[var(--team-color)] transition-colors duration-300">
-              #{index + 1}
-            </div>
-            <div className="absolute z-0 blur-3xl h-16 w-16 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--team-color)]"></div>
-            <div className="block group-hover:hidden">
-              {/* Team name */}
-              <div className="text-center py-4">
-                <h2 className="font-bold text-xl text-[var(--team-color)]">
-                  {teamName}
-                </h2>
+        {teams &&
+          Object.entries(teams).map(([teamName, drivers], index) => (
+            <div
+              key={teamName}
+              className="group max-w-sm rounded-3xl  shadow-lg backdrop-blur-sm bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative"
+              style={{ "--team-color": `#${drivers[0].team_colour}` }}
+            >
+              <div className="absolute -top-6 -left-5 p-2 text-3xl font-bold z-10 outline outline-zinc-900 rounded-full h-16 w-16 bg-black/40 text-zinc-700 flex items-center justify-center group-hover:text-[var(--team-color)] transition-colors duration-300">
+                #{index + 1}
               </div>
-              {/* Team car image */}
-              <div className="flex justify-center items-center h-full">
-                <Image
-                  src={`https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/${year}/${teamName
-                    .replace(/\s+/g, "-")
-                    .toLowerCase()}.png.transform/6col-retina/image.png`}
-                  className="w-fit h-fit z-10"
-                  alt={`${teamName} team car`}
-                  height={200}
-                  width={200}
-                  unoptimized={true}
-                />
-              </div>
-            </div>
-            {/* Drivers information */}
-            <div className="hidden group-hover:flex flex-col justify-between h-full px-8 py-2">
-              {drivers.map((driver, index) => (
-                <div key={index} className="flex-1">
-                  <div className="flex justify-between items-center h-full">
-                    <div>
-                      <div className="font-bold text-lg">
-                        {driver.first_name}{" "}
-                        <span
-                          style={{ color: `#${driver.team_colour}` }}
-                          className="uppercase"
-                        >
-                          {driver.last_name}
-                        </span>
-                      </div>
-                      <div className="flex items-center mt-1">
-                        <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2">
-                          #{driver.driver_number}
-                        </span>
-                        <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200">
-                          {driver.name_acronym}
-                        </span>
-                      </div>
-                    </div>
-                    {/* Driver image */}
-                    <div className="self-center">
-                      <Image
-                        src={
-                          driver.headshot_url ||
-                          "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png"
-                        }
-                        alt={`${driver.full_name}`}
-                        height={48}
-                        width={48}
-                        unoptimized={true}
-                        className="rounded-full outline outline-zinc-900"
-                      />
-                    </div>
-                  </div>
-
-                  {index < drivers.length - 1 && (
-                    <div className="flex-grow border-b border-zinc-800"></div>
-                  )}
+              <div className="absolute z-0 blur-3xl h-16 w-16 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--team-color)]"></div>
+              <div className="block group-hover:hidden">
+                {/* Team name */}
+                <div className="text-center py-4">
+                  <h2 className="font-bold text-xl text-[var(--team-color)]">
+                    {teamName}
+                  </h2>
                 </div>
-              ))}
+                {/* Team car image */}
+                <div className="flex justify-center items-center h-full">
+                  <Image
+                    src={`https://media.formula1.com/d_team_car_fallback_image.png/content/dam/fom-website/teams/${year}/${teamName
+                      .replace(/\s+/g, "-")
+                      .toLowerCase()}.png.transform/6col-retina/image.png`}
+                    className="w-fit h-fit z-10"
+                    alt={`${teamName} team car`}
+                    height={200}
+                    width={200}
+                    unoptimized={true}
+                  />
+                </div>
+              </div>
+              {/* Drivers information */}
+              <div className="hidden group-hover:flex flex-col justify-between h-full px-8 py-2">
+                {drivers.map((driver, index) => (
+                  <div key={index} className="flex-1">
+                    <div className="flex justify-between items-center h-full">
+                      <div>
+                        <div className="font-bold text-lg">
+                          {driver.first_name}{" "}
+                          <span
+                            style={{ color: `#${driver.team_colour}` }}
+                            className="uppercase"
+                          >
+                            {driver.last_name}
+                          </span>
+                        </div>
+                        <div className="flex items-center mt-1">
+                          <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200 mr-2">
+                            #{driver.driver_number}
+                          </span>
+                          <span className="bg-zinc-600 rounded-full px-3 py-1 text-sm font-semibold text-gray-200">
+                            {driver.name_acronym}
+                          </span>
+                        </div>
+                      </div>
+                      {/* Driver image */}
+                      <div className="self-center">
+                        <Image
+                          src={
+                            driver.headshot_url ||
+                            "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png"
+                          }
+                          alt={`${driver.full_name}`}
+                          height={48}
+                          width={48}
+                          unoptimized={true}
+                          className="rounded-full outline outline-zinc-900"
+                        />
+                      </div>
+                    </div>
+
+                    {index < drivers.length - 1 && (
+                      <div className="flex-grow border-b border-zinc-800"></div>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
     </>
   );
 };
 
-export default Drivers;
+export default Teams;
 
 export const getStaticPaths = async () => {
   const years = ["2024", "2023"];
@@ -148,7 +149,6 @@ export const getStaticProps = async (context) => {
     const driversData = await driversResponse.json();
     teams = driversData.reduce((acc, driver) => {
       (acc[driver.team_name] = acc[driver.team_name] || []).push(driver);
-      console.log(driver.team_name);
       return acc;
     }, {});
   } catch (error) {
@@ -160,13 +160,6 @@ export const getStaticProps = async (context) => {
     let constructorName = standing.Constructor.name.toLowerCase();
     constructorName = constructorName.replace(/f1|team/g, "").trim();
     const matchingTeamKey = Object.keys(teams).find((teamName) => {
-      if (teamName.toLowerCase().includes(constructorName)) {
-        console.log(
-          teamName.toLowerCase(),
-          constructorName,
-          teamName.toLowerCase().includes(constructorName)
-        );
-      }
       return teamName.toLowerCase().includes(constructorName);
     });
     if (matchingTeamKey) {
