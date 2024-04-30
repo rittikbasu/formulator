@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import Selector from "@/components/Selector";
+import Badge from "@/components/Bagde";
 
 const Teams = ({ teams, year }) => {
   return (
@@ -18,8 +19,8 @@ const Teams = ({ teams, year }) => {
               className="group max-w-sm rounded-3xl shadow-lg backdrop-blur-sm webkit-backdrop-blur bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative"
               style={{ "--team-color": `#${drivers[0].team_colour}` }}
             >
-              <div className="absolute -top-6 -left-5 p-2 text-3xl font-bold z-10 outline outline-zinc-900 rounded-full h-16 w-16 bg-black/40 text-zinc-700 flex items-center justify-center group-hover:text-[var(--team-color)] transition-colors duration-300">
-                #{index + 1}
+              <div className="absolute -top-6 -left-7 md:-left-8">
+                <Badge ranking={index + 1} />
               </div>
               <div className="absolute z-0 blur-3xl h-16 w-16 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--team-color)]"></div>
               <div className="block group-hover:hidden">
@@ -51,10 +52,7 @@ const Teams = ({ teams, year }) => {
                       <div>
                         <div className="font-bold text-lg">
                           {driver.first_name}{" "}
-                          <span
-                            style={{ color: `#${driver.team_colour}` }}
-                            className="uppercase"
-                          >
+                          <span className="uppercase text-[var(--team-color)]">
                             {driver.last_name}
                           </span>
                         </div>
