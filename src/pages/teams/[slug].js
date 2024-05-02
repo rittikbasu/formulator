@@ -13,14 +13,17 @@ const Teams = ({ teams, year }) => {
       <Selector year={year} category="teams" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12 mt-8 justify-center">
         {teams &&
-          Object.entries(teams).map(([teamName, drivers], index) => (
+          Object.entries(teams).map(([teamName, teamData], index) => (
             <div
               key={teamName}
               className="group max-w-sm rounded-3xl shadow-lg backdrop-blur-sm webkit-backdrop-blur bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative"
-              style={{ "--team-color": `#${drivers[0].team_colour}` }}
+              style={{ "--team-color": `#${teamData.drivers[0].team_colour}` }}
             >
               <div className="absolute -top-6 -left-7 md:-left-8">
                 <Badge ranking={index + 1} />
+              </div>
+              <div className="absolute -bottom-5 transform -translate-x-1/2 left-1/2 bg-zinc-900 border border-zinc-800/50 py-2 px-8 rounded-xl text-zinc-200 group-hover:text-[var(--team-color)] transition duration-300">
+                {teamData.points} PTS
               </div>
               <div className="absolute z-0 blur-3xl h-16 w-16 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[var(--team-color)]"></div>
               <div className="block group-hover:hidden">
@@ -46,7 +49,7 @@ const Teams = ({ teams, year }) => {
               </div>
               {/* Drivers information */}
               <div className="hidden group-hover:flex flex-col justify-between h-full px-8 py-2">
-                {drivers.map((driver, index) => (
+                {teamData.drivers.map((driver, index) => (
                   <div key={index} className="flex-1">
                     <div className="flex justify-between items-center h-full">
                       <div>
@@ -81,7 +84,7 @@ const Teams = ({ teams, year }) => {
                       </div>
                     </div>
 
-                    {index < drivers.length - 1 && (
+                    {index < teamData.drivers.length - 1 && (
                       <div className="flex-grow border-b border-zinc-800"></div>
                     )}
                   </div>
@@ -161,7 +164,10 @@ export const getStaticProps = async (context) => {
       return teamName.toLowerCase().includes(constructorName);
     });
     if (matchingTeamKey) {
-      acc[matchingTeamKey] = teams[matchingTeamKey];
+      acc[matchingTeamKey] = {
+        drivers: teams[matchingTeamKey],
+        points: standing.points,
+      };
     }
     return acc;
   }, {});
