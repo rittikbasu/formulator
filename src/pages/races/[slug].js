@@ -50,7 +50,7 @@ const Drivers = ({ circuits, year }) => {
               onClick={() => openModal(circuit, closeModal)}
             >
               <div className="absolute z-0 blur-3xl h-20 w-20 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-1000 bg-red-500"></div>
-              <div className="bg-zinc-900/50 backdrop-blur-sm webkit-backdrop-blur p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
+              <div className="bg-zinc-900/50 webkit-backdrop-blur p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
                 <h3 className="text-zinc-200 text-lg mb-2 line-clamp-1">
                   <span className="uppercase font-bold text-red-500">
                     {circuit.circuitName}
@@ -84,24 +84,24 @@ export default Drivers;
 
 const CircuitModal = ({ circuit, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isClosing, setIsClosing] = useState(false); // State to handle closing animation
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     if (circuit) {
       setIsVisible(true);
       setIsClosing(false);
-      document.body.style.overflow = "hidden"; // Disable scroll on body
+      document.body.style.overflow = "hidden";
     } else {
       setIsVisible(false);
       setTimeout(() => {
-        setIsClosing(false); // Reset closing state after animation
+        setIsClosing(false);
         document.body.style.overflow = "unset"; // Enable scroll on body
       }, 500); // Delay should match the CSS transition duration
     }
   }, [circuit]);
 
   const handleClose = () => {
-    setIsClosing(true); // Start closing animation
+    setIsClosing(true);
     setTimeout(() => {
       onClose();
     }, 500); // Delay should match the CSS transition duration
@@ -117,7 +117,7 @@ const CircuitModal = ({ circuit, onClose }) => {
 
   return (
     <div
-      className={`fixed inset-0 bg-black backdrop-blur bg-opacity-50 z-50 flex justify-center pt-8 md:items-center transition-opacity duration-300 ${
+      className={`fixed inset-0 bg-black webkit-backdrop-blur-lg bg-opacity-50 z-50 flex justify-center pt-8 md:items-center transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
       style={{
@@ -130,7 +130,7 @@ const CircuitModal = ({ circuit, onClose }) => {
       }}
       onClick={handleBackdropClick}
     >
-      <div className="bg-zinc-800/50 backdrop-blur md:rounded-3xl rounded-t-3xl max-w-4xl md:h-5/6  w-full overflow-hidden">
+      <div className="bg-zinc-800/50 webkit-backdrop-blur-lg md:rounded-3xl rounded-t-3xl max-w-4xl md:h-5/6  w-full overflow-hidden">
         <div
           className="md:hidden flex items-center cursor-pointer md:px-8 px-4 my-4 text-red-700 hover:text-red-500"
           onClick={handleClose}
