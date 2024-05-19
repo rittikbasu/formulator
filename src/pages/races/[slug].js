@@ -151,48 +151,56 @@ export const getStaticProps = async (context) => {
       `https://ergast.com/api/f1/${slug}/${roundNumber}/results.json`
     );
     const resultsData = await resultsResponse.json();
-    const results = resultsData.MRData.RaceTable.Races[0].Results.map(
-      (result) => {
-        if (result.FastestLap && result.FastestLap.rank === "1") {
-          fastestDriver =
-            result.Driver.givenName + " " + result.Driver.familyName;
-        }
-        return {
-          position: result.position.padStart(2, "0"),
-          driver: result.Driver.givenName + " " + result.Driver.familyName,
-          constructor: result.Constructor.name,
-          points: result.points,
-          laps: result.laps,
-          status:
-            result.status === "Finished" || result.status.endsWith("Lap")
-              ? "Finished"
-              : "DNF",
-          positionsGained: parseInt(result.grid) - parseInt(result.position),
-          fastestLapTime: result.FastestLap
-            ? result.FastestLap.Time.time
-            : "N/A",
-          fastestLapNumber: result.FastestLap ? result.FastestLap.lap : "N/A",
-          gapToLeader: result.Time ? result.Time.time.replace("+", "") : "N/A",
-        };
-      }
-    );
+    const race = resultsData.MRData.RaceTable.Races[0];
 
-    const raceName = resultsData.MRData.RaceTable.Races[0].raceName;
+    const results =
+      race && race.Results
+        ? race.Results.map((result) => {
+            if (result.FastestLap && result.FastestLap.rank === "1") {
+              fastestDriver =
+                result.Driver.givenName + " " + result.Driver.familyName;
+            }
+            return {
+              position: result.position.padStart(2, "0"),
+              driver: result.Driver.givenName + " " + result.Driver.familyName,
+              constructor: result.Constructor.name,
+              points: result.points,
+              laps: result.laps,
+              status:
+                result.status === "Finished" || result.status.endsWith("Lap")
+                  ? "Finished"
+                  : "DNF",
+              positionsGained:
+                parseInt(result.grid) - parseInt(result.position),
+              fastestLapTime: result.FastestLap
+                ? result.FastestLap.Time.time
+                : "N/A",
+              fastestLapNumber: result.FastestLap
+                ? result.FastestLap.lap
+                : "N/A",
+              gapToLeader: result.Time
+                ? result.Time.time.replace("+", "")
+                : "N/A",
+            };
+          })
+        : [];
+
+    const raceName = race ? race.raceName : "N/A";
 
     return {
       circuitName: session.circuit_short_name,
-      country: countryName,
-      raceName: raceName,
+      countryName: session.country_name,
+      raceName,
       circuitImage: imageUrl,
       firstGrandPrix: stats["First Grand Prix"] || "N/A",
       numberOfLaps: stats["Number of Laps"] || "N/A",
       circuitLength: parseFloat(stats["Circuit Length"]).toFixed(2) || "N/A",
       raceDistance: parseFloat(stats["Race Distance"]).toFixed(2) || "N/A",
-      lapRecord: lapRecord,
-      lapRecordBy: lapRecordBy,
-      lapRecordOn: lapRecordOn,
-      results: results,
-      fastestDriver: fastestDriver,
+      lapRecord,
+      lapRecordBy,
+      lapRecordOn,
+      results,
+      fastestDriver,
     };
   });
 
