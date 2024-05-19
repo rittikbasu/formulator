@@ -143,6 +143,8 @@ export const getStaticProps = async (context) => {
     const lapRecordBy = lapRecordMatch ? lapRecordMatch[2] : "N/A";
     const lapRecordOn = lapRecordMatch ? lapRecordMatch[3] : "N/A";
 
+    let fastestDriver = null;
+
     // Fetch race results from Ergast API
     const roundNumber = index + 1;
     const resultsResponse = await fetch(
@@ -150,35 +152,32 @@ export const getStaticProps = async (context) => {
     );
     const resultsData = await resultsResponse.json();
     const results = resultsData.MRData.RaceTable.Races[0].Results.map(
-      (result) => ({
-        position: result.position.padStart(2, "0"),
-        driver: result.Driver.givenName + " " + result.Driver.familyName,
-        constructor: result.Constructor.name,
-        points: result.points,
-        laps: result.laps,
-        status:
-          result.status === "Finished" || result.status.endsWith("Lap")
-            ? "Finished"
-            : "DNF",
-        positionsGained: parseInt(result.grid) - parseInt(result.position),
-        fastestLapTime: result.FastestLap ? result.FastestLap.Time.time : "N/A",
-        fastestLapNumber: result.FastestLap ? result.FastestLap.lap : "N/A",
-        gapToLeader: result.Time ? result.Time.time.replace("+", "") : "N/A",
-      })
+      (result) => {
+        if (result.FastestLap && result.FastestLap.rank === "1") {
+          fastestDriver =
+            result.Driver.givenName + " " + result.Driver.familyName;
+        }
+        return {
+          position: result.position.padStart(2, "0"),
+          driver: result.Driver.givenName + " " + result.Driver.familyName,
+          constructor: result.Constructor.name,
+          points: result.points,
+          laps: result.laps,
+          status:
+            result.status === "Finished" || result.status.endsWith("Lap")
+              ? "Finished"
+              : "DNF",
+          positionsGained: parseInt(result.grid) - parseInt(result.position),
+          fastestLapTime: result.FastestLap
+            ? result.FastestLap.Time.time
+            : "N/A",
+          fastestLapNumber: result.FastestLap ? result.FastestLap.lap : "N/A",
+          gapToLeader: result.Time ? result.Time.time.replace("+", "") : "N/A",
+        };
+      }
     );
 
     const raceName = resultsData.MRData.RaceTable.Races[0].raceName;
-
-    const fastestDriver = results.reduce((fastest, result) => {
-      if (
-        fastest === null ||
-        (result.fastestLapTime !== "N/A" &&
-          result.fastestLapTime < fastest.fastestLapTime)
-      ) {
-        return result.driver;
-      }
-      return fastest;
-    }, null);
 
     return {
       circuitName: session.circuit_short_name,
