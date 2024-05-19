@@ -34,7 +34,7 @@ const Drivers = ({ circuits, year }) => {
         <title>Formulator - All things Formula 1</title>
       </Head>
       <Selector year={year} category="races" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-8">
         {circuits &&
           circuits.map((circuit) => (
             <div
@@ -43,6 +43,9 @@ const Drivers = ({ circuits, year }) => {
               onClick={() => openModal(circuit, closeModal)}
             >
               <div className="absolute z-0 blur-3xl h-20 w-20 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-1000 bg-red-500"></div>
+              <div className="absolute z-10 mr-2 md:tracking-wide text-sm -top-8 right-0 py-2.5 rounded-xl text-zinc-400 transition duration-300">
+                {circuit.raceDate}
+              </div>
               <div className="bg-zinc-900/50 webkit-backdrop-blur p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
                 <h3 className="text-zinc-200 text-lg mb-2 line-clamp-1">
                   <span className="uppercase font-bold text-red-500">
@@ -185,12 +188,20 @@ export const getStaticProps = async (context) => {
           })
         : [];
 
-    const raceName = race ? race.raceName : "N/A";
+    const raceName = race ? race.raceName : null;
+    const raceDate = race
+      ? new Date(race.date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        })
+      : null;
 
     return {
       circuitName: session.circuit_short_name,
-      countryName: session.country_name,
+      country: session.country_name,
       raceName,
+      raceDate,
       circuitImage: imageUrl,
       firstGrandPrix: stats["First Grand Prix"] || "N/A",
       numberOfLaps: stats["Number of Laps"] || "N/A",
@@ -205,6 +216,7 @@ export const getStaticProps = async (context) => {
   });
 
   circuits = await Promise.all(fetchPromises);
+  circuits.reverse();
 
   return {
     props: { circuits: circuits, year: slug },
