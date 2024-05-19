@@ -74,12 +74,12 @@ const CircuitModal = ({ circuit, onClose }) => {
           <span className="ml-2 md:text-xl">back</span>
         </div>
         <h2 className="text-2xl md:text-3xl hidden md:block text-center text-zinc-200 pl-2 py-8">
-          {circuit.raceName}
+          {circuit.raceName || circuit.country + " Grand Prix"}
         </h2>
         {/* <div className="drag-handle md:hidden mx-auto w-12 h-1.5 flex-shrink-0 rounded-full bg-zinc-400 my-4 cursor-grab" /> */}
         <div className="h-full overflow-scroll px-4 md:pt-8 md:px-8 pb-20 md:pb-32">
           <h2 className="text-2xl md:text-3xl text-center text-zinc-200 pl-2 pb-4 md:hidden block">
-            {circuit.raceName}
+            {circuit.raceName || circuit.country + " Grand Prix"}
           </h2>
           <Image
             src={circuit.circuitImage}
@@ -122,98 +122,99 @@ const CircuitModal = ({ circuit, onClose }) => {
               </p>
             </div>
           </div>
-
-          <div className="mt-4 p-2">
-            <h4 className="text-xl md:text-3xl text-zinc-200 mb-2 md:mb-4">
-              Race Results
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-y-8">
-              {circuit.results.map((result, index) => (
-                <div
-                  key={index}
-                  className="bg-zinc-800/50 p-4 rounded-xl shadow-md grid grid-cols-6 gap-4 relative"
-                >
-                  <div className="col-span-1">
-                    <h5 className="text-lg text-white">{result.position}</h5>
-                    <p
-                      className={`text-xs ${
-                        result.positionsGained < 0
-                          ? "text-red-700"
-                          : "text-green-600"
-                      }`}
-                    >
-                      <span className="inline-flex items-center">
-                        {result.positionsGained < 0 ? (
-                          <MdKeyboardDoubleArrowDown className="h-4 w-4" />
-                        ) : result.positionsGained > 0 ? (
-                          <MdKeyboardDoubleArrowUp className="h-4 w-4" />
-                        ) : (
-                          <FaEquals className="h-3 w-3 mr-1" />
-                        )}{" "}
-                        {Math.abs(result.positionsGained)}
-                      </span>
-                    </p>
-                  </div>
-                  <div className="col-span-3">
-                    <h5 className="text-lg md:text-xl text-white">
-                      {result.driver.split(" ")[0]}
-                      <br />
-                      {result.driver.split(" ")[1]}
-                    </h5>
-                    <p className="text-xs md:text-sm text-zinc-400">
-                      {result.constructor}
-                    </p>
-                    {result.fastestLapNumber !== "N/A" && (
+          {circuit.results && circuit.results.length > 0 && (
+            <div className="mt-4 p-2">
+              <h4 className="text-xl md:text-3xl text-zinc-200 mb-2 md:mb-4">
+                Race Results
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-y-8">
+                {circuit.results.map((result, index) => (
+                  <div
+                    key={index}
+                    className="bg-zinc-800/50 p-4 rounded-xl shadow-md grid grid-cols-6 gap-4 relative"
+                  >
+                    <div className="col-span-1">
+                      <h5 className="text-lg text-white">{result.position}</h5>
                       <p
-                        className={clsx(
-                          "text-xs md:text-sm pt-2",
-                          circuit.fastestDriver === result.driver
-                            ? "text-yellow-600"
-                            : "text-gray-400"
-                        )}
+                        className={`text-xs ${
+                          result.positionsGained < 0
+                            ? "text-red-700"
+                            : "text-green-600"
+                        }`}
                       >
                         <span className="inline-flex items-center">
-                          <BiSolidStopwatch className="mr-1 -ml-0.5 h-4 w-4" />{" "}
-                          Lap {result.fastestLapNumber} :{" "}
-                          {result.fastestLapTime}
+                          {result.positionsGained < 0 ? (
+                            <MdKeyboardDoubleArrowDown className="h-4 w-4" />
+                          ) : result.positionsGained > 0 ? (
+                            <MdKeyboardDoubleArrowUp className="h-4 w-4" />
+                          ) : (
+                            <FaEquals className="h-3 w-3 mr-1" />
+                          )}{" "}
+                          {Math.abs(result.positionsGained)}
                         </span>
                       </p>
-                    )}
-                  </div>
-                  <div className="col-span-2">
-                    <h5 className="text-lg text-white text-right">
-                      {result.points}
-                      <br /> pts
-                    </h5>
-                    <p className="text-xs md:text-sm">&nbsp;</p>
-                    {result.status === "Finished" ? (
-                      result.gapToLeader !== "N/A" && (
-                        <p className="text-xs md:text-sm text-zinc-400 pt-2">
-                          {result.position === "01" ? (
-                            <span className="inline-flex items-center">
-                              <TbClockHour3 className="mr-1 w-[0.9rem] h-[0.9rem]" />
-                              {result.gapToLeader}
-                            </span>
-                          ) : (
-                            <span>
-                              <span className="inline-flex items-center">
-                                <MdOutlineSocialDistance className="mr-1 w-4 h-4" />
-                                {result.gapToLeader}s
-                              </span>
-                            </span>
-                          )}
-                        </p>
-                      )
-                    ) : (
-                      <p className="text-md text-right text-red-900 pt-0.5">
-                        {result.status}
+                    </div>
+                    <div className="col-span-3">
+                      <h5 className="text-lg md:text-xl text-white">
+                        {result.driver.split(" ")[0]}
+                        <br />
+                        {result.driver.split(" ")[1]}
+                      </h5>
+                      <p className="text-xs md:text-sm text-zinc-400">
+                        {result.constructor}
                       </p>
-                    )}
+                      {result.fastestLapNumber !== "N/A" && (
+                        <p
+                          className={clsx(
+                            "text-xs md:text-sm pt-2",
+                            circuit.fastestDriver === result.driver
+                              ? "text-yellow-600"
+                              : "text-gray-400"
+                          )}
+                        >
+                          <span className="inline-flex items-center">
+                            <BiSolidStopwatch className="mr-1 -ml-0.5 h-4 w-4" />{" "}
+                            Lap {result.fastestLapNumber} :{" "}
+                            {result.fastestLapTime}
+                          </span>
+                        </p>
+                      )}
+                    </div>
+                    <div className="col-span-2">
+                      <h5 className="text-lg text-white text-right">
+                        {result.points}
+                        <br /> pts
+                      </h5>
+                      <p className="text-xs md:text-sm">&nbsp;</p>
+                      {result.status === "Finished" ? (
+                        result.gapToLeader !== "N/A" && (
+                          <p className="text-xs md:text-sm text-zinc-400 pt-2">
+                            {result.position === "01" ? (
+                              <span className="inline-flex items-center">
+                                <TbClockHour3 className="mr-1 w-[0.9rem] h-[0.9rem]" />
+                                {result.gapToLeader}
+                              </span>
+                            ) : (
+                              <span>
+                                <span className="inline-flex items-center">
+                                  <MdOutlineSocialDistance className="mr-1 w-4 h-4" />
+                                  {result.gapToLeader}s
+                                </span>
+                              </span>
+                            )}
+                          </p>
+                        )
+                      ) : (
+                        <p className="text-md text-right text-red-900 pt-0.5">
+                          {result.status}
+                        </p>
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
