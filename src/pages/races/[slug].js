@@ -8,7 +8,7 @@ import Selector from "@/components/Selector";
 import CircuitModal from "@/components/CircuitModal";
 
 const Drivers = ({ circuits, year }) => {
-  console.log(circuits);
+  // console.log(circuits);
   const [selectedCircuit, setSelectedCircuit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -188,7 +188,13 @@ export const getStaticProps = async (context) => {
           })
         : [];
 
-    const raceName = race ? race.raceName : null;
+    let raceName = race ? race.raceName : null;
+    if (
+      raceName &&
+      raceName.replace(/\s+/g, "").replace("GrandPrix", "").length > 12
+    ) {
+      raceName = raceName.replace("Grand Prix", "GP");
+    }
     const raceDate = race
       ? new Date(race.date).toLocaleDateString("en-US", {
           month: "short",
