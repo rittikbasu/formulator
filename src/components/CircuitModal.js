@@ -168,7 +168,7 @@ const CircuitModal = ({ circuit, onClose }) => {
                           className={clsx(
                             "text-xs md:text-sm pt-2",
                             circuit.fastestDriver === result.driver
-                              ? "text-yellow-600"
+                              ? "text-fuchsia-500"
                               : "text-gray-400"
                           )}
                         >
