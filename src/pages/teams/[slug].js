@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import Selector from "@/components/Selector";
 import Badge from "@/components/Bagde";
+import { getSessionKey } from "@/utils/getSessionKey";
 
 const Teams = ({ teams, year }) => {
   return (
@@ -113,21 +114,7 @@ export const getStaticPaths = async () => {
 
 export const getStaticProps = async (context) => {
   const { slug } = context.params;
-  const currentYear = new Date().getFullYear().toString();
-  let session_key = "latest";
-
-  if (slug !== currentYear) {
-    try {
-      const sessionsResponse = await fetch(
-        `https://api.openf1.org/v1/sessions?session_name=Race&year=${slug}`
-      );
-      const sessionsData = await sessionsResponse.json();
-      const lastSession = sessionsData[sessionsData.length - 1];
-      session_key = lastSession.session_key;
-    } catch (error) {
-      console.error("Error fetching session data:", error);
-    }
-  }
+  const session_key = await getSessionKey(slug);
 
   let standings = [];
   try {

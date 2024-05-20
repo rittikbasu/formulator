@@ -21,6 +21,8 @@ const Selector = ({ year, category }) => {
         router.push(`/teams/${selectedYear}`);
       } else if (selectedCategory === "races") {
         router.push(`/races/${selectedYear}`);
+      } else if (selectedCategory === "drivers") {
+        router.push(`/drivers/${selectedYear}`);
       }
     }
   }, [selectedCategory, selectedYear]);
@@ -63,6 +65,7 @@ const Selector = ({ year, category }) => {
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
         >
           <option value="teams">Teams</option>
+          <option value="drivers">Drivers</option>
           <option value="races">Races</option>
         </select>
       </div>
