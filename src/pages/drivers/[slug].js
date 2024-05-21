@@ -36,7 +36,7 @@ const Drivers = ({ standings, year }) => {
                   />
                 </div>
                 <div className="bg-zinc-900/50 webkit-backdrop-blur p-4 rounded-r-3xl border-t border-r border-b border-zinc-900 ml-[-110px] flex-1 pl-[110px] relative">
-                  <div className="absolute z-0 blur-3xl h-28 w-8 rounded-tl-full rounded-bl-full top-1/2 left-0 transform -translate-y-1/2 bg-[var(--team-color)]"></div>
+                  <div className="absolute z-0 blur-3xl h-24 w-8 rounded-tl-full rounded-bl-full top-1/2 left-10 transform -translate-y-1/2 bg-[var(--team-color)]"></div>
                   <div
                     className="absolute -top-4 -right-4 text-transparent text-4xl font-bold"
                     style={{
@@ -96,6 +96,7 @@ export const getStaticProps = async (context) => {
 
         return {
           driverId: driver.Driver.driverId,
+          driverCode: driver.Driver.code,
           givenName: driver.Driver.givenName,
           familyName: driver.Driver.familyName,
           position:
@@ -115,13 +116,8 @@ export const getStaticProps = async (context) => {
 
   // Add team colors to the standings
   const standingsWithColors = standings.map((driver) => {
-    let constructorName = driver.constructorName
-      .toLowerCase()
-      .replace(/f1|team/g, "")
-      .trim();
-
     const matchingTeam = driversData.find((team) => {
-      return team.team_name.toLowerCase().includes(constructorName);
+      return team.name_acronym === driver.driverCode;
     });
 
     const teamColor = matchingTeam ? matchingTeam.team_colour : null;
