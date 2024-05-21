@@ -24,7 +24,7 @@ const Drivers = ({ standings, year }) => {
                 <div className="relative z-10 right-6 -top-2">
                   <Image
                     src={driver.imageUrl}
-                    alt={`${driver.givenName} ${driver.familyName}`}
+                    alt={`Headshot of ${driver.givenName} ${driver.familyName}`}
                     width={160}
                     height={160}
                     unoptimized={true}
@@ -116,8 +116,13 @@ export const getStaticProps = async (context) => {
 
   // Add team colors to the standings
   const standingsWithColors = standings.map((driver) => {
+    let constructorName = driver.constructorName
+      .toLowerCase()
+      .replace(/f1|team/g, "")
+      .trim();
+
     const matchingTeam = driversData.find((team) => {
-      return team.name_acronym === driver.driverCode;
+      return team.team_name.toLowerCase().includes(constructorName);
     });
 
     const teamColor = matchingTeam ? matchingTeam.team_colour : null;
