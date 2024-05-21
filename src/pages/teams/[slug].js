@@ -12,7 +12,7 @@ const Teams = ({ teams, year }) => {
         <title>Formulator - All things Formula 1</title>
       </Head>
       <Selector year={year} category="teams" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-12 gap-x-12 mt-8 justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 mb-12 justify-center">
         {teams &&
           Object.entries(teams).map(([teamName, teamData], index) => (
             <div

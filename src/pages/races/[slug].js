@@ -34,7 +34,7 @@ const Drivers = ({ circuits, year }) => {
         <title>Formulator - All things Formula 1</title>
       </Head>
       <Selector year={year} category="races" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-8 mb-11">
         {circuits &&
           circuits.map((circuit) => (
             <div
