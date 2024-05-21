@@ -29,9 +29,9 @@ const Selector = ({ year, category }) => {
 
   return (
     <div className="max-w-sm mx-auto md:pb-16 py-8 px-1">
-      <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/80 backdrop-blur-sm webkit-backdrop-blur border border-zinc-800 rounded-xl">
+      <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/60 backdrop-blur-sm webkit-backdrop-blur border border-zinc-900 rounded-xl">
         <div className="absolute inset-0 flex justify-center">
-          <div className="w-px bg-zinc-800 self-stretch"></div>
+          <div className="w-px bg-zinc-900 self-stretch"></div>
         </div>
 
         <select
