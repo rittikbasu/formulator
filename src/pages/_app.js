@@ -1,8 +1,11 @@
+import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import Link from "next/link";
 import localFont from "next/font/local";
-
 import clsx from "clsx";
+
+import { FiArrowUpRight } from "react-icons/fi";
 
 import "@/styles/globals.css";
 
@@ -22,6 +25,12 @@ const f1Font = localFont({
 });
 
 export default function App({ Component, pageProps }) {
+  const [revolve, setRevolve] = useState(false);
+
+  const handleImageClick = () => {
+    setRevolve(true);
+    setTimeout(() => setRevolve(false), 1000);
+  };
   return (
     <>
       <Head>
@@ -36,6 +45,11 @@ export default function App({ Component, pageProps }) {
         <div className="flex justify-center md:mb-16 mb-8">
           <Image
             src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
+            className={clsx(
+              "transition duration-1000",
+              revolve && " animate-revolve -hue-rotate-90"
+            )}
+            onClick={handleImageClick}
             alt="F1 logo"
             height={100}
             width={200}
@@ -44,6 +58,15 @@ export default function App({ Component, pageProps }) {
           />
         </div>
         <Component {...pageProps} />
+        <footer className="mt-8 md:mt-16">
+          <Link
+            href="https://twitter.com/_rittik"
+            className="flex items-center justify-center text-zinc-400 hover:text-fuchsia-500 tracking-widest"
+          >
+            by _rittik
+            <FiArrowUpRight className="h-5 w-5 ml-1" />
+          </Link>
+        </footer>
       </div>
     </>
   );

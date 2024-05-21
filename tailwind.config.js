@@ -19,6 +19,19 @@ module.exports = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      animation: {
+        revolve: "revolve-side-to-side 1s ease-in-out",
+      },
+      keyframes: {
+        "revolve-side-to-side": {
+          from: {
+            transform: "rotateY(0deg)",
+          },
+          to: {
+            transform: "rotateY(360deg)",
+          },
+        },
+      },
     },
   },
   plugins: [
