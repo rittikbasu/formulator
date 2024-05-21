@@ -2,6 +2,7 @@ import { useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/react";
 import localFont from "next/font/local";
 import clsx from "clsx";
 
@@ -68,6 +69,7 @@ export default function App({ Component, pageProps }) {
           </Link>
         </footer>
       </div>
+      <Analytics />
     </>
   );
 }
