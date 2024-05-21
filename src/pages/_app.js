@@ -40,6 +40,7 @@ export default function App({ Component, pageProps }) {
             height={100}
             width={200}
             unoptimized={true}
+            priority
           />
         </div>
         <Component {...pageProps} />
