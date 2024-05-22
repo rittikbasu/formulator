@@ -1,6 +1,7 @@
 # Formulator
 
 I built this Formula 1 client because of my newfound love for F1 racing. Stay updated with all the stats, scores, and standings in a beautifully designed UI that's as fast as your favorite team on race day!
+
 ![formulator](<https://ik.imagekit.io/zwcfsadeijm/Neutral%20Minimalistic%20Motivational%20Quote%20Twitter%20Post%20(1)_7wiried9z.png?updatedAt=1716395475970>)
 
 ## Features
