@@ -61,10 +61,10 @@ export default function App({ Component, pageProps }) {
         <Component {...pageProps} />
         <footer className="mt-8 md:mt-16">
           <Link
-            href="https://twitter.com/_rittik"
+            href="https://github.com/rittikbasu/formulator"
             className="flex items-center justify-center text-zinc-400 hover:text-fuchsia-500 tracking-widest"
           >
-            by _rittik
+            source code
             <FiArrowUpRight className="h-5 w-5 ml-1" />
           </Link>
         </footer>
