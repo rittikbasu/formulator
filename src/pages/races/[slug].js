@@ -106,6 +106,7 @@ export const getStaticProps = async (context) => {
       Austin: "USA",
       "Yas Marina Circuit": "Abu_Dhabi",
       "Monte Carlo": "Monoco",
+      Imola: "Emilia_Romagna",
     };
 
     circuitName =
