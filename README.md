@@ -35,7 +35,7 @@ To get formulator up and running follow these simple steps:
    ```
 4. Fire up the development server and open http://localhost:3000:
    ```bash
-    npm start
+    npm run dev
    ```
 
 ## Contributing
