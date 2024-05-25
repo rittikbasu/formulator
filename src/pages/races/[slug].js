@@ -123,7 +123,13 @@ export const getStaticProps = async (context) => {
       .catch(() => countryImageUrl);
 
     // Fetching stats for each circuit
-    const statsUrl = `https://www.formula1.com/en/racing/${slug}/${countryName.replace(
+    const useCircuitName = ["Las Vegas", "Miami", "Emilia_Romagna"].includes(
+      circuitName
+    );
+    const nameForUrl = useCircuitName
+      ? circuitName.replace(/_/g, "")
+      : countryName;
+    const statsUrl = `https://www.formula1.com/en/racing/${slug}/${nameForUrl.replace(
       /\s+/g,
       "_"
     )}/Circuit.html`;
