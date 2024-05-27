@@ -32,6 +32,9 @@ export default function App({ Component, pageProps }) {
     setRevolve(true);
     setTimeout(() => setRevolve(false), 1000);
   };
+
+  const currentYear = new Date().getFullYear();
+
   return (
     <>
       <Head>
@@ -43,7 +46,10 @@ export default function App({ Component, pageProps }) {
         <div className="w-full min-h-screen fixed inset-0 -z-10 bg-black bg-dot-white/[0.2] flex items-center justify-center">
           <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         </div>
-        <div className="flex justify-center md:mb-16 mb-8">
+        <Link
+          href={`/teams/${currentYear}`}
+          className="flex justify-center md:mb-16 mb-8"
+        >
           <Image
             src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
             className={clsx(
@@ -57,7 +63,7 @@ export default function App({ Component, pageProps }) {
             unoptimized={true}
             priority
           />
-        </div>
+        </Link>
         <Component {...pageProps} />
         <footer className="mt-8 md:mt-16">
           <Link
