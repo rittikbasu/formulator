@@ -36,7 +36,7 @@ const Selector = ({ year, category }) => {
 
         <select
           id="year"
-          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10"
+          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           defaultValue={year}
           onChange={handleYearChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
@@ -59,7 +59,7 @@ const Selector = ({ year, category }) => {
 
         <select
           id="category"
-          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10"
+          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           defaultValue={category}
           onChange={handleOptionChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
