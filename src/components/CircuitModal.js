@@ -4,11 +4,40 @@ import clsx from "clsx";
 
 import { TbClockHour3 } from "react-icons/tb";
 import { BiSolidStopwatch } from "react-icons/bi";
-import { MdOutlineSocialDistance } from "react-icons/md";
-import { MdKeyboardDoubleArrowUp } from "react-icons/md";
-import { MdKeyboardDoubleArrowDown } from "react-icons/md";
+import {
+  MdOutlineSocialDistance,
+  MdKeyboardDoubleArrowUp,
+  MdKeyboardDoubleArrowDown,
+  MdArrowDropDown,
+} from "react-icons/md";
 import { FaEquals } from "react-icons/fa6";
 import { IoIosArrowRoundBack } from "react-icons/io";
+
+const Accordion = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="my-2">
+      <button
+        className={clsx(
+          "text-sm md:text-base tracking-widest flex items-center ml-1 transition-colors duration-300",
+          isOpen
+            ? "text-zinc-400 md:hover:text-zinc-500"
+            : "text-sky-400 md:hover:text-sky-500"
+        )}
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {title}
+        <MdArrowDropDown
+          className={`h-6 w-6 transition-transform ${
+            isOpen ? "rotate-180" : "rotate-0"
+          }`}
+        />
+      </button>
+      {isOpen && <div className="accordion-content">{children}</div>}
+    </div>
+  );
+};
 
 const CircuitModal = ({ circuit, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
@@ -124,9 +153,39 @@ const CircuitModal = ({ circuit, onClose }) => {
           </div>
           {circuit.results && circuit.results.length > 0 && (
             <div className="mt-4 p-2">
-              <h4 className="text-xl md:text-3xl text-zinc-200 mb-2 md:mb-4">
+              <h4 className="text-xl md:text-3xl text-zinc-200">
                 Race Results
               </h4>
+              <Accordion title="info">
+                <div className="grid md:grid-cols-3 grid-cols-2 gap-y-2 mt-2 mb-4 text-xs md:text-sm ml-1">
+                  <div className="flex items-center">
+                    <MdKeyboardDoubleArrowUp className="h-4 w-4 text-green-600" />
+                    <span className="ml-2 text-zinc-200">Positions Gained</span>
+                  </div>
+                  <div className="flex items-center">
+                    <MdKeyboardDoubleArrowDown className="h-4 w-4 text-red-700" />
+                    <span className="ml-2 text-zinc-200">Positions Lost</span>
+                  </div>
+                  <div className="flex items-center">
+                    <BiSolidStopwatch className="h-4 w-4 text-zinc-300" />
+                    <span className="ml-2 text-zinc-200">
+                      Personal Best Lap
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <BiSolidStopwatch className="h-4 w-4 text-fuchsia-500" />
+                    <span className="ml-2 text-zinc-200">Race Fastest Lap</span>
+                  </div>
+                  <div className="flex items-center">
+                    <TbClockHour3 className="mr-[0.18rem] w-[0.9rem] h-[0.9rem] text-zinc-300" />
+                    <span className="ml-2 text-zinc-200">Finishing Time</span>
+                  </div>
+                  <div className="flex items-center">
+                    <MdOutlineSocialDistance className="mr-1 w-4 h-4 text-zinc-300" />
+                    <span className="ml-2 text-zinc-200">Gap to Leader</span>
+                  </div>
+                </div>
+              </Accordion>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-y-8">
                 {circuit.results.map((result, index) => (
                   <div
