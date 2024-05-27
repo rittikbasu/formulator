@@ -176,10 +176,9 @@ export const getStaticProps = async (context) => {
               constructor: result.Constructor.name,
               points: result.points,
               laps: result.laps,
-              status:
-                result.status === "Finished" || result.status.endsWith("Lap")
-                  ? "Finished"
-                  : "DNF",
+              status: /(?:Finished|Lap|Laps)$/.test(result.status)
+                ? "Finished"
+                : "DNF",
               positionsGained:
                 parseInt(result.grid) - parseInt(result.position),
               fastestLapTime: result.FastestLap
@@ -190,6 +189,9 @@ export const getStaticProps = async (context) => {
                 : "N/A",
               gapToLeader: result.Time
                 ? result.Time.time.replace("+", "")
+                : result.status.endsWith("Lap") ||
+                  result.status.endsWith("Laps")
+                ? result.status.replace("+", "")
                 : "N/A",
             };
           })

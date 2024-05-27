@@ -198,7 +198,11 @@ const CircuitModal = ({ circuit, onClose }) => {
                               <span>
                                 <span className="inline-flex items-center">
                                   <MdOutlineSocialDistance className="mr-1 w-4 h-4" />
-                                  {result.gapToLeader}s
+                                  <span className="font-mono">+</span>
+                                  {result.gapToLeader.endsWith("Lap") ||
+                                  result.gapToLeader.endsWith("Laps")
+                                    ? result.gapToLeader
+                                    : `${result.gapToLeader}s`}
                                 </span>
                               </span>
                             )}
