@@ -176,12 +176,12 @@ const CircuitModal = ({ circuit, onClose }) => {
                     <BiSolidStopwatch className="h-4 w-4 text-fuchsia-500" />
                     <span className="ml-2 text-zinc-200">Race Fastest Lap</span>
                   </div>
-                  <div className="flex items-center">
-                    <TbClockHour3 className="mr-[0.18rem] w-[0.9rem] h-[0.9rem] text-zinc-300" />
+                  <div className="flex items-center ml-[0.04rem]">
+                    <TbClockHour3 className="mr-[0.1rem] w-[0.9rem] h-[0.9rem] text-zinc-300" />
                     <span className="ml-2 text-zinc-200">Finishing Time</span>
                   </div>
                   <div className="flex items-center">
-                    <MdOutlineSocialDistance className="mr-1 w-4 h-4 text-zinc-300" />
+                    <MdOutlineSocialDistance className="mr-[0.04rem] w-4 h-4 text-zinc-300" />
                     <span className="ml-2 text-zinc-200">Gap to Leader</span>
                   </div>
                 </div>
