@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 
-import Selector from "@/components/Selector";
 import Badge from "@/components/Bagde";
 import { getSessionKey } from "@/utils/getSessionKey";
 
@@ -11,7 +10,6 @@ const Teams = ({ teams, year }) => {
       <Head>
         <title>Formulator - All things Formula 1</title>
       </Head>
-      <Selector year={year} category="teams" />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 mb-12 justify-center">
         {teams &&
           Object.entries(teams).map(([teamName, teamData], index) => (

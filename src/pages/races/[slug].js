@@ -4,7 +4,6 @@ import Image from "next/image";
 import axios from "axios";
 import { parse } from "node-html-parser";
 
-import Selector from "@/components/Selector";
 import CircuitModal from "@/components/CircuitModal";
 
 const Drivers = ({ circuits, year }) => {
@@ -33,7 +32,7 @@ const Drivers = ({ circuits, year }) => {
       <Head>
         <title>Formulator - All things Formula 1</title>
       </Head>
-      <Selector year={year} category="races" />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-8 mb-11">
         {circuits &&
           circuits.map((circuit) => (

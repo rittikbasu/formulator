@@ -1,7 +1,6 @@
 import Head from "next/head";
 import Image from "next/image";
 
-import Selector from "@/components/Selector";
 import { getSessionKey } from "@/utils/getSessionKey";
 
 const Drivers = ({ standings, year }) => {
@@ -11,7 +10,7 @@ const Drivers = ({ standings, year }) => {
       <Head>
         <title>Formulator - All things Formula 1</title>
       </Head>
-      <Selector year={year} category="drivers" />
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 mt-8">
         {standings &&
           standings.map((driver) => {

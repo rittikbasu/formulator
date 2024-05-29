@@ -10,6 +10,8 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 import "@/styles/globals.css";
 
+import Selector from "@/components/Selector";
+
 const f1Font = localFont({
   src: [
     {
@@ -27,9 +29,11 @@ const f1Font = localFont({
 
 export default function App({ Component, pageProps }) {
   const [revolve, setRevolve] = useState(false);
+  const [isHome, setIsHome] = useState(true);
 
   const handleImageClick = () => {
     setRevolve(true);
+    setIsHome(true);
     setTimeout(() => setRevolve(false), 1000);
   };
 
@@ -46,6 +50,7 @@ export default function App({ Component, pageProps }) {
         <div className="w-full min-h-screen fixed inset-0 -z-10 bg-black bg-dot-white/[0.2] flex items-center justify-center">
           <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         </div>
+
         <Link
           href={`/teams/${currentYear}`}
           className="flex justify-center md:mb-16 mb-8"
@@ -64,6 +69,7 @@ export default function App({ Component, pageProps }) {
             priority
           />
         </Link>
+        <Selector isHome={isHome} setIsHome={setIsHome} />
         <Component {...pageProps} />
         <footer className="mt-8 md:mt-16">
           <Link

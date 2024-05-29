@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
-const Selector = ({ year, category }) => {
-  const [selectedYear, setSelectedYear] = useState(year);
-  const [selectedCategory, setSelectedCategory] = useState(category);
+const Selector = ({ isHome, setIsHome }) => {
+  const currentYear = new Date().getFullYear();
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedCategory, setSelectedCategory] = useState("teams");
   const router = useRouter();
 
   const handleYearChange = (e) => {
-    console.log(e.target.value);
     setSelectedYear(e.target.value);
   };
 
@@ -27,6 +27,14 @@ const Selector = ({ year, category }) => {
     }
   }, [selectedCategory, selectedYear]);
 
+  useEffect(() => {
+    if (isHome) {
+      setSelectedYear(currentYear);
+      setSelectedCategory("teams");
+      setIsHome(false);
+    }
+  }, [isHome]);
+
   return (
     <div className="max-w-sm mx-auto md:pb-16 py-8 px-1">
       <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/60 backdrop-blur-sm webkit-backdrop-blur border border-zinc-900 rounded-xl">
@@ -37,7 +45,7 @@ const Selector = ({ year, category }) => {
         <select
           id="year"
           className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
-          defaultValue={year}
+          value={selectedYear}
           onChange={handleYearChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
         >
@@ -60,7 +68,7 @@ const Selector = ({ year, category }) => {
         <select
           id="category"
           className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
-          defaultValue={category}
+          value={selectedCategory}
           onChange={handleOptionChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
         >
