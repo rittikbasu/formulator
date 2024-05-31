@@ -15,7 +15,7 @@ const Teams = ({ teams, year }) => {
           Object.entries(teams).map(([teamName, teamData], index) => (
             <div
               key={teamName}
-              className="group max-w-sm rounded-3xl shadow-lg backdrop-blur-sm webkit-backdrop-blur bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative"
+              className="group max-w-sm mx-auto rounded-3xl shadow-lg backdrop-blur-sm webkit-backdrop-blur bg-zinc-900/50 border border-zinc-900 min-w-[300px] min-h-[250px] flex flex-col justify-between relative w-full"
               style={{ "--team-color": `#${teamData.drivers[0].team_colour}` }}
             >
               <div className="absolute -top-6 -left-7 md:-left-8">

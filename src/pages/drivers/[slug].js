@@ -16,7 +16,7 @@ const Drivers = ({ standings, year }) => {
           standings.map((driver) => {
             return (
               <div
-                className="flex items-center w-full relative group"
+                className="flex items-center w-full relative group max-w-sm mx-auto"
                 key={driver.driverId}
                 style={{ "--team-color": `#${driver.teamColor}` }}
               >
