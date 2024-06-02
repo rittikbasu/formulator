@@ -34,7 +34,13 @@ const Accordion = ({ title, children }) => {
           }`}
         />
       </button>
-      {isOpen && <div className="accordion-content">{children}</div>}
+      <div
+        className={`duration-300 overflow-hidden ${
+          isOpen ? "max-h-screen ease-in" : "max-h-0 ease-out"
+        }`}
+      >
+        {children}
+      </div>
     </div>
   );
 };
