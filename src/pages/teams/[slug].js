@@ -50,8 +50,22 @@ const Teams = ({ teams, year }) => {
               <div className="hidden group-hover:flex flex-col justify-between h-full px-8 py-2">
                 {teamData.drivers.map((driver, index) => (
                   <div key={index} className="flex-1">
-                    <div className="flex justify-between items-center h-full">
-                      <div>
+                    <div className="flex items-center h-full">
+                      {/* Driver image */}
+                      <div className="self-center">
+                        <Image
+                          src={
+                            driver.headshot_url ||
+                            "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png"
+                          }
+                          alt={`${driver.full_name}`}
+                          height={48}
+                          width={48}
+                          unoptimized={true}
+                          className="rounded-full outline outline-zinc-900"
+                        />
+                      </div>
+                      <div className="ml-4">
                         <div className="font-bold text-lg">
                           {driver.first_name}{" "}
                           <span className="uppercase text-[var(--team-color)]">
@@ -66,20 +80,6 @@ const Teams = ({ teams, year }) => {
                             {driver.name_acronym}
                           </span>
                         </div>
-                      </div>
-                      {/* Driver image */}
-                      <div className="self-center">
-                        <Image
-                          src={
-                            driver.headshot_url ||
-                            "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png"
-                          }
-                          alt={`${driver.full_name}`}
-                          height={48}
-                          width={48}
-                          unoptimized={true}
-                          className="rounded-full outline outline-zinc-900"
-                        />
                       </div>
                     </div>
 
