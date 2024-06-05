@@ -36,15 +36,15 @@ const Selector = ({ isHome, setIsHome }) => {
   }, [isHome]);
 
   return (
-    <div className="max-w-sm mx-auto md:pb-16 py-8 px-1">
-      <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/60 backdrop-blur-sm webkit-backdrop-blur border border-zinc-900 rounded-xl">
+    <div className="max-w-sm mx-auto md:pb-16 pt-4 px-8">
+      <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/60 webkit-backdrop-blur-lg border border-zinc-800/60 rounded-xl">
         <div className="absolute inset-0 flex justify-center">
-          <div className="w-px bg-zinc-900 self-stretch"></div>
+          <div className="w-px bg-zinc-800/60 self-stretch"></div>
         </div>
 
         <select
           id="year"
-          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
+          className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           value={selectedYear}
           onChange={handleYearChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
@@ -67,7 +67,7 @@ const Selector = ({ isHome, setIsHome }) => {
 
         <select
           id="category"
-          className="appearance-none bg-transparent py-2.5 text-sm font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
+          className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           value={selectedCategory}
           onChange={handleOptionChange}
           style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
