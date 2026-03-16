@@ -1,15 +1,35 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
-import axios from "axios";
-import { parse } from "node-html-parser";
 
 import CircuitModal from "@/components/CircuitModal";
+import {
+  getAvailableSeasons,
+  getCircuitImageUrl,
+  getCircuitStats,
+  getLatestAvailableSeason,
+  getOpenF1RaceSessions,
+  getSeasonRaceResults,
+  getSeasonRevalidateSeconds,
+  isSupportedSeason,
+} from "@/lib/f1/index.mjs";
 
-const Drivers = ({ circuits, year }) => {
-  // console.log(circuits);
+const CIRCUIT_PLACEHOLDER_URL =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png";
+
+const Races = ({ circuits, year }) => {
   const [selectedCircuit, setSelectedCircuit] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const nextRaceRound = useMemo(() => {
+    if (Number(year) !== new Date().getFullYear()) {
+      return null;
+    }
+
+    return (
+      circuits.find((circuit) => !circuit.results || circuit.results.length === 0)
+        ?.round || null
+    );
+  }, [circuits, year]);
 
   const openModal = (circuit) => {
     setSelectedCircuit(circuit);
@@ -21,52 +41,62 @@ const Drivers = ({ circuits, year }) => {
   };
 
   useEffect(() => {
-    if (isModalOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
+    document.body.style.overflow = isModalOpen ? "hidden" : "unset";
+
+    return () => {
       document.body.style.overflow = "unset";
-    }
+    };
   }, [isModalOpen]);
+
   return (
     <>
       <Head>
         <title>Formulator - All things Formula 1</title>
       </Head>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-14 mt-8 mb-11">
-        {circuits &&
-          circuits.map((circuit) => (
-            <div
-              className="max-w-sm mx-auto relative group"
-              key={circuit.circuitName}
-              onClick={() => openModal(circuit, closeModal)}
-            >
-              <div className="absolute z-0 blur-3xl h-20 w-20 rounded-full top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 transition-colors duration-1000 bg-red-500"></div>
-              <div className="absolute z-10 mr-2 md:tracking-wide text-sm -top-8 right-0 py-2.5 rounded-xl text-zinc-400 transition duration-300">
-                {circuit.raceDate}
-              </div>
-              <div className="bg-zinc-900/50 webkit-backdrop-blur p-4 rounded-3xl border border-zinc-900 group-hover:border-red-900 transition duration-300">
-                <h3 className="text-zinc-200 text-lg mb-2 line-clamp-1">
-                  <span className="uppercase font-bold text-red-500">
-                    {circuit.circuitName}
-                  </span>
-                  , {circuit.country}
-                </h3>
+      <div className="grid grid-cols-1 gap-14 mt-8 mb-11 md:grid-cols-2 lg:grid-cols-3">
+        {circuits.map((circuit) => (
+          <button
+            type="button"
+            className="relative mx-auto w-full max-w-sm text-left group"
+            key={`${circuit.round}-${circuit.circuitName}`}
+            onClick={() => openModal(circuit)}
+          >
+            <div className="absolute top-1/2 left-1/2 z-0 w-20 h-20 bg-red-500 rounded-full blur-3xl transition-colors duration-1000 transform -translate-x-1/2 -translate-y-1/2"></div>
+            <div className="flex absolute right-2 left-2 -top-8 z-10 gap-3 justify-between items-center text-sm text-zinc-400">
+              <span className="rounded-full border border-zinc-800 bg-zinc-950/80 px-3 py-0.5 uppercase tracking-[0.25em] text-[0.65rem] text-zinc-300">
+                Round {String(circuit.round).padStart(2, "0")}
+              </span>
+              <span className="md:tracking-wide">{circuit.raceDate}</span>
+            </div>
+            <div className="p-4 rounded-3xl border transition duration-300 bg-zinc-900/50 webkit-backdrop-blur border-zinc-900 group-hover:border-red-900">
+              <h3 className="mb-2 text-lg text-zinc-200 line-clamp-1">
+                <span className="font-bold text-red-500 uppercase">
+                  {circuit.circuitName}
+                </span>
+                , {circuit.country}
+              </h3>
+              <div className="relative">
                 <Image
                   src={circuit.circuitImage}
                   alt={`${circuit.circuitName} Circuit`}
                   width={400}
                   height={225}
                   unoptimized={true}
-                  onError={(e) => {
-                    e.target.src =
-                      "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png";
+                  onError={(event) => {
+                    event.target.src = CIRCUIT_PLACEHOLDER_URL;
                   }}
                   className="rounded-md"
                 />
+                {circuit.round === nextRaceRound && (
+                  <div className="absolute -bottom-2 -right-1 shrink-0 rounded-full border border-emerald-500/40 bg-black/70 px-3 py-1 text-[0.65rem] uppercase tracking-[0.25em] text-emerald-300 backdrop-blur-sm">
+                    Next Race
+                  </div>
+                )}
               </div>
             </div>
-          ))}
+          </button>
+        ))}
       </div>
       {isModalOpen && (
         <CircuitModal circuit={selectedCircuit} onClose={closeModal} />
@@ -75,165 +105,114 @@ const Drivers = ({ circuits, year }) => {
   );
 };
 
-export default Drivers;
+export default Races;
 
-export const getStaticPaths = async () => {
-  const years = ["2024", "2023"];
+export function getStaticPaths() {
   return {
-    paths: years.map((year) => ({
-      params: {
-        slug: year,
-      },
-    })),
-    fallback: true,
+    paths: [],
+    fallback: "blocking",
   };
-};
+}
 
-export const getStaticProps = async (context) => {
-  const { slug } = context.params;
-  let circuits = [];
-  const response = await fetch(
-    `https://api.openf1.org/v1/sessions?session_name=Race&year=${slug}`
-  );
-  const sessionsData = await response.json();
+export async function getStaticProps(context) {
+  const year = context.params?.slug;
 
-  const fetchPromises = sessionsData.map(async (session, index) => {
-    const countryName = session.country_name;
-    let circuitName = session.circuit_short_name;
-
-    const circuitNameOverrides = {
-      Austin: "USA",
-      "Yas Marina Circuit": "Abu_Dhabi",
-      "Monte Carlo": "Monoco",
-      Imola: "Emilia_Romagna",
-    };
-
-    circuitName =
-      circuitNameOverrides[circuitName] || circuitName.replace(/\s+/g, "_");
-
-    const circuitImageUrl = `https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${circuitName}_Circuit.png`;
-    const countryImageUrl = `https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${countryName.replace(
-      /\s+/g,
-      "_"
-    )}_Circuit.png`;
-
-    const imageUrl = await fetch(circuitImageUrl, { method: "HEAD" })
-      .then((response) => (response.ok ? circuitImageUrl : countryImageUrl))
-      .catch(() => countryImageUrl);
-
-    // Fetching stats for each circuit
-    const useCircuitName = ["Las Vegas", "Miami", "Emilia_Romagna"].includes(
-      circuitName
-    );
-    const nameForUrl = useCircuitName
-      ? circuitName.replace(/_/g, "")
-      : countryName;
-    const statsUrl = `https://www.formula1.com/en/racing/${slug}/${nameForUrl.replace(
-      /\s+/g,
-      "_"
-    )}/Circuit.html`;
-    const { data } = await axios.get(statsUrl);
-    const root = parse(data);
-    const stats = {};
-    root.querySelectorAll(".f1-stat").forEach((stat) => {
-      const labelElement = stat.querySelector(".misc--label");
-      const valueElement = stat.querySelector(".f1-bold--stat");
-      if (labelElement && valueElement) {
-        const label = labelElement.textContent.trim();
-        const value = valueElement.textContent.trim();
-        stats[label] = value;
-      }
-    });
-
-    // Parsing lap record into multiple parts
-    const lapRecordRegex = /(\d+:\d+\.\d+)\s+(.*?)\s+\((\d{4})\)/;
-    const lapRecordMatch = stats["Lap Record"].match(lapRecordRegex);
-    const lapRecord = lapRecordMatch ? lapRecordMatch[1] : "N/A";
-    const lapRecordBy = lapRecordMatch ? lapRecordMatch[2] : "N/A";
-    const lapRecordOn = lapRecordMatch ? lapRecordMatch[3] : "N/A";
-
-    let fastestDriver = null;
-
-    // Fetch race results from Ergast API
-    const roundNumber = index + 1;
-    const resultsResponse = await fetch(
-      `https://ergast.com/api/f1/${slug}/${roundNumber}/results.json`
-    );
-    const resultsData = await resultsResponse.json();
-    const race = resultsData.MRData.RaceTable.Races[0];
-
-    const results =
-      race && race.Results
-        ? race.Results.map((result) => {
-            if (result.FastestLap && result.FastestLap.rank === "1") {
-              fastestDriver =
-                result.Driver.givenName + " " + result.Driver.familyName;
-            }
-            return {
-              position: result.position.padStart(2, "0"),
-              driver: result.Driver.givenName + " " + result.Driver.familyName,
-              constructor: result.Constructor.name,
-              points: result.points,
-              laps: result.laps,
-              status: /(?:Finished|Lap|Laps)$/.test(result.status)
-                ? "Finished"
-                : "DNF",
-              positionsGained:
-                parseInt(result.grid) - parseInt(result.position),
-              fastestLapTime: result.FastestLap
-                ? result.FastestLap.Time.time
-                : "N/A",
-              fastestLapNumber: result.FastestLap
-                ? result.FastestLap.lap
-                : "N/A",
-              gapToLeader: result.Time
-                ? result.Time.time.replace("+", "")
-                : result.status.endsWith("Lap") ||
-                  result.status.endsWith("Laps")
-                ? result.status.replace("+", "")
-                : "N/A",
-            };
-          })
-        : [];
-
-    let raceName = race ? race.raceName : null;
-    if (
-      raceName &&
-      raceName.replace(/\s+/g, "").replace("GrandPrix", "").length > 12
-    ) {
-      raceName = raceName.replace("Grand Prix", "GP");
-    }
-    const raceDate = race
-      ? new Date(race.date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric",
-        })
-      : null;
-
+  if (!isSupportedSeason(year)) {
     return {
-      circuitName: session.circuit_short_name,
-      country: session.country_name,
-      raceName,
-      raceDate,
-      circuitImage: imageUrl,
-      firstGrandPrix: stats["First Grand Prix"] || "N/A",
-      numberOfLaps: stats["Number of Laps"] || "N/A",
-      circuitLength: parseFloat(stats["Circuit Length"]).toFixed(2) || "N/A",
-      raceDistance: parseFloat(stats["Race Distance"]).toFixed(2) || "N/A",
-      lapRecord,
-      lapRecordBy,
-      lapRecordOn,
-      results,
-      fastestDriver,
+      notFound: true,
+      revalidate: getSeasonRevalidateSeconds(String(new Date().getFullYear())),
     };
-  });
+  }
 
-  circuits = await Promise.all(fetchPromises);
-  circuits.reverse();
+  const [availableYears, latestAvailableYear, sessions, raceResultsByRound] =
+    await Promise.all([
+      getAvailableSeasons(),
+      getLatestAvailableSeason(),
+      getOpenF1RaceSessions(year),
+      getSeasonRaceResults(year),
+    ]);
+
+  if (sessions.length === 0 && raceResultsByRound.size === 0) {
+    return {
+      notFound: true,
+      revalidate: getSeasonRevalidateSeconds(year),
+    };
+  }
+
+  const roundKeys = new Set(
+    sessions.map((_, index) => String(index + 1)).concat([...raceResultsByRound.keys()])
+  );
+
+  const circuits = await Promise.all(
+    [...roundKeys]
+      .sort((left, right) => Number(left) - Number(right))
+      .map(async (roundKey) => {
+      const raceData = raceResultsByRound.get(roundKey);
+      const session = sessions[Number(roundKey) - 1];
+      const countryName =
+        session?.country_name || raceData?.country || raceData?.raceName || "Unknown";
+      const circuitShortName =
+        session?.circuit_short_name ||
+        raceData?.circuitName ||
+        raceData?.raceName ||
+        "Unknown";
+      const circuitMeta = {
+        countryName,
+        circuitShortName,
+      };
+
+      const [circuitImage, circuitStats] = await Promise.all([
+        getCircuitImageUrl(year, circuitMeta),
+        getCircuitStats(year, circuitMeta),
+      ]);
+
+      let raceName = raceData?.raceName || session?.location || null;
+      if (
+        raceName &&
+        raceName.replace(/\s+/g, "").replace("GrandPrix", "").length > 12
+      ) {
+        raceName = raceName.replace("Grand Prix", "GP");
+      }
+
+      const sessionDate = session?.date_start || session?.date_end;
+      const raceDate = raceData?.raceDate
+        ? raceData.raceDate
+        : sessionDate
+        ? new Date(sessionDate).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })
+        : null;
+
+      return {
+        round: roundKey,
+        circuitName: circuitShortName,
+        country: countryName,
+        raceName,
+        raceDate,
+        raceTimestamp: raceData?.date || sessionDate || null,
+        circuitImage,
+        firstGrandPrix: circuitStats.firstGrandPrix,
+        numberOfLaps: circuitStats.numberOfLaps,
+        circuitLength: circuitStats.circuitLength,
+        raceDistance: circuitStats.raceDistance,
+        lapRecord: circuitStats.lapRecord,
+        lapRecordBy: circuitStats.lapRecordBy,
+        lapRecordOn: circuitStats.lapRecordOn,
+        results: raceData?.results || [],
+        fastestDriver: raceData?.fastestDriver || null,
+      };
+    })
+  );
 
   return {
-    props: { circuits: circuits, year: slug },
-    revalidate: 1,
+    props: {
+      circuits,
+      year,
+      availableYears,
+      latestAvailableYear,
+    },
+    revalidate: getSeasonRevalidateSeconds(year),
   };
-};
+}
