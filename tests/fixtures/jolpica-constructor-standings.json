@@ -1,0 +1,28 @@
+{
+  "MRData": {
+    "StandingsTable": {
+      "StandingsLists": [
+        {
+          "ConstructorStandings": [
+            {
+              "position": "1",
+              "points": "210",
+              "Constructor": {
+                "constructorId": "red_bull",
+                "name": "Red Bull"
+              }
+            },
+            {
+              "position": "2",
+              "points": "160",
+              "Constructor": {
+                "constructorId": "ferrari",
+                "name": "Ferrari"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

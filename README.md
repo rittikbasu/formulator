@@ -6,45 +6,48 @@ I built this Formula 1 client because of my newfound love for F1 racing. Stay up
 
 ## Features
 
-- Driver and team standings
-- Race results
-- Circuit stats
-- Historical data (upto 2023 currently but will be updated soon)
+- Driver standings
+- Constructor standings
+- Race cards and race results
+- Circuit statistics and imagery
+- Automatic season rollover to the latest season with data
 
 ## Tech Stack
 
-- **Frontend**: Next.js, Tailwind CSS
-- **API**: [Ergast](https://ergast.com/mrd/) + [OpenF1](https://openf1.org/) for F1 data
+- **Frontend**: Next.js Pages Router, Tailwind CSS
+- **Data**: Jolpica (Ergast-compatible), OpenF1, Formula1.com circuit-page scraping
 - **Deployment**: Vercel
+
+## Environment
+
+The app works with these optional environment variables:
+
+```bash
+JOLPICA_BASE_URL=https://api.jolpi.ca
+OPENF1_BASE_URL=https://api.openf1.org/v1
+F1_FETCH_TIMEOUT_MS=5000
+```
+
+A sample file is included at `.env.example`.
 
 ## Getting Started
 
-To get formulator up and running follow these simple steps:
-
-1. Clone the repository:
+1. Install dependencies:
    ```bash
-   git clone https://github.com/rittikbasu/formulator.git
+   npm install
    ```
-2. Navigate to the project directory:
+2. Start the development server:
    ```bash
-   cd formulator
+   npm run dev
    ```
-3. Install dependencies:
+3. Run checks:
    ```bash
-    npm install
-   ```
-4. Fire up the development server and open http://localhost:3000:
-   ```bash
-    npm run dev
+   npm run lint
+   npm test
+   npm run build
    ```
 
-## Contributing
+## Notes
 
-Formulator is an open-source project, and contributions are welcome so feel free to submit a pull request by following these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add some feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Open a pull request.
+- Season pages use blocking ISR, so the build no longer depends on live upstream API calls.
+- OpenF1 and the circuit scraper are treated as optional enrichments. If they partially fail, the pages still render with reduced detail instead of crashing.

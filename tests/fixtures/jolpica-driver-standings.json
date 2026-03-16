@@ -1,0 +1,42 @@
+{
+  "MRData": {
+    "StandingsTable": {
+      "StandingsLists": [
+        {
+          "DriverStandings": [
+            {
+              "position": "1",
+              "points": "110",
+              "Driver": {
+                "driverId": "max_verstappen",
+                "code": "VER",
+                "givenName": "Max",
+                "familyName": "Verstappen"
+              },
+              "Constructors": [
+                {
+                  "name": "Red Bull"
+                }
+              ]
+            },
+            {
+              "position": "2",
+              "points": "85",
+              "Driver": {
+                "driverId": "charles_leclerc",
+                "code": "LEC",
+                "givenName": "Charles",
+                "familyName": "Leclerc"
+              },
+              "Constructors": [
+                {
+                  "name": "Ferrari"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
