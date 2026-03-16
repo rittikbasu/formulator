@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -11,7 +11,6 @@ import { FiArrowUpRight } from "react-icons/fi";
 import "@/styles/globals.css";
 
 import Selector from "@/components/Selector";
-import NextRaceTicker from "@/components/NextRaceTicker";
 
 const f1Font = localFont({
   src: [
@@ -30,8 +29,13 @@ const f1Font = localFont({
 
 export default function App({ Component, pageProps }) {
   const [revolve, setRevolve] = useState(true);
-  const [isHome, setIsHome] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const availableYears = pageProps.availableYears || [];
+  const latestAvailableYear =
+    pageProps.latestAvailableYear ||
+    availableYears[0] ||
+    String(new Date().getFullYear());
+  const shouldShowSelector = availableYears.length > 0;
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -44,13 +48,10 @@ export default function App({ Component, pageProps }) {
 
   const handleImageClick = () => {
     setRevolve(true);
-    setIsHome(true);
     setTimeout(() => {
       setRevolve(false);
     }, 1000);
   };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <>
@@ -76,9 +77,9 @@ export default function App({ Component, pageProps }) {
           )}
         >
           <Link
-            href={revolve ? "#" : `/teams/${currentYear}`}
+            href={revolve ? "#" : `/teams/${latestAvailableYear}`}
             className="flex justify-center md:my-16 mt-8 my-12"
-            onClick={!revolve && handleImageClick}
+            onClick={!revolve ? handleImageClick : undefined}
           >
             <Image
               src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
@@ -95,9 +96,14 @@ export default function App({ Component, pageProps }) {
           </Link>
         </div>
         <div className={clsx(showContent ? "block" : "hidden")}>
-          <div className="sticky top-0 z-20 w-full">
-            <Selector isHome={isHome} setIsHome={setIsHome} />
-          </div>
+          {shouldShowSelector && (
+            <div className="sticky top-0 z-20 w-full">
+              <Selector
+                availableYears={availableYears}
+                latestAvailableYear={latestAvailableYear}
+              />
+            </div>
+          )}
           <div className="p-8">
             <Component {...pageProps} />
             <footer className="my-8 md:mt-16">

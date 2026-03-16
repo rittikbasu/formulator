@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 
-const currentYear = new Date().getFullYear();
-
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -11,16 +9,27 @@ const nextConfig = {
         protocol: "https",
         hostname: "media.formula1.com",
       },
-    ],
-  },
-  async redirects() {
-    return [
       {
-        source: "/",
-        destination: `/teams/${currentYear}`,
-        permanent: true,
+        protocol: "https",
+        hostname: "www.formula1.com",
       },
-    ];
+      {
+        protocol: "https",
+        hostname: "logodownload.org",
+      },
+      {
+        protocol: "https",
+        hostname: "ik.imagekit.io",
+      },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+      },
+      {
+        protocol: "https",
+        hostname: "www.state.gov",
+      },
+    ],
   },
 };
 

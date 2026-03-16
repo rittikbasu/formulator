@@ -1,39 +1,44 @@
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useRouter } from "next/router";
 
-const Selector = ({ isHome, setIsHome }) => {
-  const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedCategory, setSelectedCategory] = useState("teams");
+function getCategoryFromPath(pathname) {
+  if (pathname.startsWith("/drivers")) {
+    return "drivers";
+  }
+
+  if (pathname.startsWith("/races")) {
+    return "races";
+  }
+
+  return "teams";
+}
+
+const Selector = ({ availableYears, latestAvailableYear }) => {
   const router = useRouter();
+  const yearOptions = useMemo(
+    () => availableYears.filter(Boolean),
+    [availableYears]
+  );
+  const defaultYear = yearOptions[0] || latestAvailableYear;
+  const selectedYear =
+    router.isReady && typeof router.query.slug === "string"
+      ? router.query.slug
+      : defaultYear;
+  const selectedCategory = getCategoryFromPath(router.pathname);
 
-  const handleYearChange = (e) => {
-    setSelectedYear(e.target.value);
-  };
-
-  const handleOptionChange = (e) => {
-    setSelectedCategory(e.target.value);
-  };
-
-  useEffect(() => {
-    if (selectedCategory && selectedYear) {
-      if (selectedCategory === "teams") {
-        router.push(`/teams/${selectedYear}`);
-      } else if (selectedCategory === "races") {
-        router.push(`/races/${selectedYear}`);
-      } else if (selectedCategory === "drivers") {
-        router.push(`/drivers/${selectedYear}`);
-      }
+  const navigateTo = (category, year) => {
+    if (!router.isReady || !category || !year) {
+      return;
     }
-  }, [selectedCategory, selectedYear]);
 
-  useEffect(() => {
-    if (isHome) {
-      setSelectedYear(currentYear);
-      setSelectedCategory("teams");
-      setIsHome(false);
+    const targetPath = `/${category}/${year}`;
+
+    if (router.asPath === targetPath) {
+      return;
     }
-  }, [isHome]);
+
+    router.push(targetPath);
+  };
 
   return (
     <div className="max-w-sm mx-auto md:pb-16 pt-4 px-8">
@@ -46,31 +51,26 @@ const Selector = ({ isHome, setIsHome }) => {
           id="year"
           className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           value={selectedYear}
-          onChange={handleYearChange}
-          style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
+          onChange={(event) =>
+            navigateTo(selectedCategory, event.target.value)
+          }
+          style={{ textAlignLast: "center", WebkitAppearance: "none" }}
         >
-          <option value="2024">2024</option>
-          <option value="2023">2023</option>
-          <option disabled value="2022">
-            2022
-          </option>
-          <option disabled value="2021">
-            2021
-          </option>
-          <option disabled value="2020">
-            2020
-          </option>
-          <option disabled value="2019">
-            2019
-          </option>
+          {yearOptions.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
         </select>
 
         <select
           id="category"
           className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
           value={selectedCategory}
-          onChange={handleOptionChange}
-          style={{ textAlignLast: "center", WebkitAppearance: "none" }} // Ensures centering in Safari
+          onChange={(event) =>
+            navigateTo(event.target.value, selectedYear)
+          }
+          style={{ textAlignLast: "center", WebkitAppearance: "none" }}
         >
           <option value="teams">Teams</option>
           <option value="drivers">Drivers</option>
