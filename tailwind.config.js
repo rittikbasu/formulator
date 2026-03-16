@@ -21,7 +21,6 @@ module.exports = {
       },
       animation: {
         revolve: "revolve-side-to-side 1s ease-in-out",
-        ticker: "ticker 15s linear infinite",
       },
       keyframes: {
         "revolve-side-to-side": {
@@ -31,10 +30,6 @@ module.exports = {
           to: {
             transform: "rotateY(360deg)",
           },
-        },
-        ticker: {
-          "0%": { transform: "translateX(60%)" },
-          "100%": { transform: "translateX(-100%)" },
         },
       },
     },
