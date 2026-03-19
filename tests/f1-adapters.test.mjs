@@ -419,6 +419,41 @@ test("getCircuitStats falls back to N/A when metadata is missing", async () => {
   });
 });
 
+test("getCircuitStats falls back to the latest prior season stats for future rounds", async () => {
+  const metadata = upsertCircuitStatsRecord(createCircuitMetadataShell(), {
+    year: "2025",
+    round: "2",
+    circuitMeta: {
+      countryName: "Saudi Arabia",
+      circuitShortName: "Jeddah Corniche Circuit",
+    },
+    stats: {
+      firstGrandPrix: "2021",
+      numberOfLaps: "50",
+      circuitLength: "6.17",
+      lapRecord: "1:30.734",
+      lapRecordBy: "Lewis Hamilton",
+      lapRecordOn: "2021",
+    },
+    updatedAt: "2026-03-20T00:00:00.000Z",
+  });
+
+  const stats = await getCircuitStats(
+    "2026",
+    { countryName: "Saudi Arabia", circuitShortName: "Jeddah" },
+    { round: "3", metadata }
+  );
+
+  assert.deepEqual(stats, {
+    firstGrandPrix: "2021",
+    numberOfLaps: "50",
+    circuitLength: "6.17",
+    lapRecord: "1:30.734",
+    lapRecordBy: "Lewis Hamilton",
+    lapRecordOn: "2021",
+  });
+});
+
 test("getLatestCompletedRound returns the most recent completed round", () => {
   const raceResultsByRound = new Map([
     ["1", { results: [{ position: "01" }], raceName: "Bahrain Grand Prix" }],

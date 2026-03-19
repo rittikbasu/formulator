@@ -234,10 +234,19 @@ export function getStoredCircuitStatsRecord(
   { year, round, circuitMeta }
 ) {
   const normalizedMetadata = normalizeCircuitMetadata(metadata);
-  const season = normalizedMetadata.seasons?.[String(year)];
+  const seasonKey = String(year);
+  const season = normalizedMetadata.seasons?.[seasonKey];
+  const statsKey = buildCircuitStatsKey(circuitMeta);
 
   if (!season) {
-    return null;
+    return Object.entries(normalizedMetadata.seasons || {})
+      .sort((left, right) => Number(right[0]) - Number(left[0]))
+      .find(([candidateYear, candidateSeason]) => {
+        return (
+          Number(candidateYear) < Number(seasonKey) &&
+          candidateSeason?.circuits?.[statsKey]
+        );
+      })?.[1]?.circuits?.[statsKey] || null;
   }
 
   if (round !== undefined && round !== null) {
@@ -251,8 +260,18 @@ export function getStoredCircuitStatsRecord(
     }
   }
 
-  const statsKey = buildCircuitStatsKey(circuitMeta);
-  return season.circuits?.[statsKey] || null;
+  if (season.circuits?.[statsKey]) {
+    return season.circuits[statsKey];
+  }
+
+  return Object.entries(normalizedMetadata.seasons || {})
+    .sort((left, right) => Number(right[0]) - Number(left[0]))
+    .find(([candidateYear, candidateSeason]) => {
+      return (
+        Number(candidateYear) < Number(seasonKey) &&
+        candidateSeason?.circuits?.[statsKey]
+      );
+    })?.[1]?.circuits?.[statsKey] || null;
 }
 
 export function hasCircuitStatsChanged(existingRecord, nextStats) {

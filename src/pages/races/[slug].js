@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 
 import CircuitModal from "@/components/CircuitModal";
+import { buildCircuitStatsKey } from "@/lib/f1/circuitStats.mjs";
 import {
   getAvailableSeasons,
   getCircuitImageUrl,
@@ -16,6 +17,55 @@ import {
 
 const CIRCUIT_PLACEHOLDER_URL =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png";
+
+const DISPLAY_LOCATION_BY_STATS_KEY = {
+  bahrain: "Sakhir",
+  "saudi-arabia": "Jeddah",
+  australia: "Melbourne",
+  china: "Shanghai",
+  japan: "Suzuka",
+  miami: "Miami",
+  "emilia-romagna": "Imola",
+  monaco: "Monte Carlo",
+  spain: "Barcelona",
+  canada: "Montreal",
+  austria: "Spielberg",
+  "great-britain": "Silverstone",
+  belgium: "Spa-Francorchamps",
+  hungary: "Budapest",
+  netherlands: "Zandvoort",
+  italy: "Monza",
+  azerbaijan: "Baku",
+  singapore: "Singapore",
+  qatar: "Lusail",
+  "united-states": "Austin",
+  mexico: "Mexico City",
+  brazil: "Sao Paulo",
+  "las-vegas": "Las Vegas",
+  "abu-dhabi": "Yas Island",
+};
+
+const DISPLAY_COUNTRY_ALIASES = {
+  "United States": "USA",
+  "United Kingdom": "UK",
+  "United Arab Emirates": "UAE",
+};
+
+function getRaceDisplayLabel({ session, raceData, circuitMeta }) {
+  const statsKey = buildCircuitStatsKey(circuitMeta);
+  const location =
+    session?.location || DISPLAY_LOCATION_BY_STATS_KEY[statsKey] || raceData?.country;
+  const country =
+    DISPLAY_COUNTRY_ALIASES[session?.country_name] ||
+    raceData?.country ||
+    session?.country_name ||
+    circuitMeta.countryName;
+
+  return {
+    location,
+    country,
+  };
+}
 
 const Races = ({ circuits, year }) => {
   const [selectedCircuit, setSelectedCircuit] = useState(null);
@@ -72,9 +122,9 @@ const Races = ({ circuits, year }) => {
             <div className="p-4 rounded-3xl border transition duration-300 bg-zinc-900/50 webkit-backdrop-blur border-zinc-900 group-hover:border-red-900">
               <h3 className="mb-2 text-lg text-zinc-200 line-clamp-1">
                 <span className="font-bold text-red-500 uppercase">
-                  {circuit.circuitName}
+                  {circuit.displayLocation}
                 </span>
-                , {circuit.country}
+                , {circuit.displayCountry}
               </h3>
               <div className="relative">
                 <Image
@@ -116,6 +166,7 @@ export function getStaticPaths() {
 
 export async function getStaticProps(context) {
   const year = context.params?.slug;
+  const isCurrentSeason = Number(year) === new Date().getFullYear();
 
   if (!isSupportedSeason(year)) {
     return {
@@ -139,16 +190,20 @@ export async function getStaticProps(context) {
     };
   }
 
-  const roundKeys = new Set(
-    sessions.map((_, index) => String(index + 1)).concat([...raceResultsByRound.keys()])
-  );
+  const roundKeys = isCurrentSeason
+    ? new Set(
+        sessions
+          .map((_, index) => String(index + 1))
+          .concat([...raceResultsByRound.keys()])
+      )
+    : new Set([...raceResultsByRound.keys()]);
 
   const circuits = await Promise.all(
     [...roundKeys]
       .sort((left, right) => Number(left) - Number(right))
       .map(async (roundKey) => {
       const raceData = raceResultsByRound.get(roundKey);
-      const session = sessions[Number(roundKey) - 1];
+      const session = isCurrentSeason ? sessions[Number(roundKey) - 1] : null;
       const countryName =
         session?.country_name || raceData?.country || raceData?.raceName || "Unknown";
       const circuitShortName =
@@ -160,6 +215,12 @@ export async function getStaticProps(context) {
         countryName,
         circuitShortName,
       };
+      const { location: displayLocation, country: displayCountry } =
+        getRaceDisplayLabel({
+          session,
+          raceData,
+          circuitMeta,
+        });
 
       const [circuitImage, circuitStats] = await Promise.all([
         getCircuitImageUrl(year, circuitMeta),
@@ -189,6 +250,8 @@ export async function getStaticProps(context) {
         round: roundKey,
         circuitName: circuitShortName,
         country: countryName,
+        displayLocation,
+        displayCountry,
         raceName,
         raceDate,
         raceTimestamp: raceData?.date || sessionDate || null,
