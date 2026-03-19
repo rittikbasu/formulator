@@ -20,12 +20,12 @@ const DRIVER_IMAGE_LAYOUTS = {
   legacy: {
     frameClassName: "-top-2 h-[160px] w-[140px]",
     imageClassName:
-      "object-contain object-left-top translate-x-[-6px] translate-y-[6px] scale-[1.16] md:group-hover:scale-[1.22]",
+      "origin-top object-contain object-left-top translate-x-[-6px] translate-y-[3px] scale-[1.12] md:group-hover:scale-[1.2]",
   },
   modern: {
-    frameClassName: "-top-3 h-[162px] w-[134px]",
+    frameClassName: "-top-2 h-[162px] w-[134px]",
     imageClassName:
-      "origin-top object-cover object-[54%_0%] scale-[1.24] md:group-hover:scale-[1.3]",
+      "origin-top object-cover object-[54%_0%] scale-[1.3] md:group-hover:scale-[1.37]",
   },
 };
 
@@ -43,7 +43,7 @@ const Drivers = ({ standings }) => {
         <title>Formulator - All things Formula 1</title>
       </Head>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 md:gap-14 mt-8">
+      <div className="grid grid-cols-1 gap-10 mt-8 md:grid-cols-2 lg:grid-cols-3 md:gap-14">
         {standings.map((driver) => {
           const teamColor = driver.teamColor || DEFAULT_TEAM_COLOR;
           const imageLayout =
@@ -51,7 +51,7 @@ const Drivers = ({ standings }) => {
 
           return (
             <div
-              className="flex items-center w-full relative group max-w-sm mx-auto"
+              className="flex relative items-center mx-auto w-full max-w-sm group"
               key={driver.driverId}
               style={{ "--team-color": teamColor }}
             >
@@ -80,23 +80,23 @@ const Drivers = ({ standings }) => {
               <div className="bg-zinc-900/50 webkit-backdrop-blur p-4 rounded-r-3xl border-t border-r border-b border-zinc-900 ml-[-110px] flex-1 pl-[110px] relative">
                 <div className="absolute z-0 blur-3xl h-24 w-8 rounded-tl-full rounded-bl-full top-1/2 left-10 transform -translate-y-1/2 bg-[var(--team-color)]"></div>
                 <div
-                  className="absolute -top-4 -right-4 text-transparent text-4xl font-bold"
+                  className="absolute -top-4 -right-4 text-4xl font-bold text-transparent"
                   style={{
                     WebkitTextStroke: "1px #a1a1aa",
                   }}
                 >
                   {driver.position}
                 </div>
-                <h3 className="text-zinc-200 text-lg mb-2">
-                  <span className="text-white block">{driver.givenName}</span>
+                <h3 className="mb-2 text-lg text-zinc-200">
+                  <span className="block text-white">{driver.givenName}</span>
                   <span className="uppercase font-bold text-[var(--team-color)] block">
                     {driver.familyName}
                   </span>
-                  <span className="text-zinc-400 text-sm block mt-1">
+                  <span className="block mt-1 text-sm text-zinc-400">
                     {driver.constructorName}
                   </span>
                 </h3>
-                <p className="text-zinc-400 mt-2">{driver.points} PTS</p>
+                <p className="mt-2 text-zinc-400">{driver.points} PTS</p>
               </div>
             </div>
           );
