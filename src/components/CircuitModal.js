@@ -144,16 +144,10 @@ const CircuitModal = ({ circuit, onClose }) => {
               <p className="text-2xl md:text-3xl">{circuit.circuitLength} km</p>
             </div>
             <div className="p-2 rounded-lg">
-              <h4 className="md:text-xl text-md text-zinc-500">
-                Race Distance
-              </h4>
-              <p className="text-2xl md:text-3xl">{circuit.raceDistance} km</p>
-            </div>
-            <div className="p-2 rounded-lg col-span-2">
               <h4 className="md:text-xl text-md text-zinc-500">Lap Record</h4>
               <p className="text-2xl md:text-3xl">{circuit.lapRecord}</p>
               <p className="text-md md:text-xl text-zinc-400">
-                By {circuit.lapRecordBy} in {circuit.lapRecordOn}
+                {circuit.lapRecordBy} ({circuit.lapRecordOn})
               </p>
             </div>
           </div>

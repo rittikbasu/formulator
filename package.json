@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --test"
+    "test": "node --test",
+    "refresh:circuit-stats": "node scripts/refresh-circuit-stats.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.2.2",

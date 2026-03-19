@@ -163,7 +163,7 @@ export async function getStaticProps(context) {
 
       const [circuitImage, circuitStats] = await Promise.all([
         getCircuitImageUrl(year, circuitMeta),
-        getCircuitStats(year, circuitMeta),
+        getCircuitStats(year, circuitMeta, { round: roundKey }),
       ]);
 
       let raceName = raceData?.raceName || session?.location || null;
@@ -196,7 +196,6 @@ export async function getStaticProps(context) {
         firstGrandPrix: circuitStats.firstGrandPrix,
         numberOfLaps: circuitStats.numberOfLaps,
         circuitLength: circuitStats.circuitLength,
-        raceDistance: circuitStats.raceDistance,
         lapRecord: circuitStats.lapRecord,
         lapRecordBy: circuitStats.lapRecordBy,
         lapRecordOn: circuitStats.lapRecordOn,

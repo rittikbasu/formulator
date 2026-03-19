@@ -10,9 +10,15 @@ import {
   getSeasonRaceResults,
 } from "../src/lib/f1/jolpica.mjs";
 import {
+  createCircuitMetadataShell,
+  buildCircuitStatsKey,
   buildCircuitImageUrls,
   extractCircuitStatsFromHtml,
+  getLatestCompletedRound,
+  getStoredCircuitStatsRecord,
   getCircuitStats,
+  hasCircuitStatsChanged,
+  upsertCircuitStatsRecord,
 } from "../src/lib/f1/circuitStats.mjs";
 import {
   buildLegacyDriverImageUrl,
@@ -235,6 +241,60 @@ test("extractCircuitStatsFromHtml parses circuit stats markup", () => {
   });
 });
 
+test("extractCircuitStatsFromHtml parses the current race page circuit section", () => {
+  const html = `
+    <html>
+      <body>
+        <div>Where to watch</div>
+        <div>Broadcast Information</div>
+        <div>Circuit</div>
+        <div>Circuit Length</div><div>5.891km</div>
+        <div>First Grand Prix</div><div>1950</div>
+        <div>Number of Laps</div><div>52</div>
+        <div>Fastest lap time</div><div>1:27.097</div><div>Max Verstappen (2020)</div>
+        <div>Race Distance</div><div>306.198km</div>
+        <div>About</div>
+      </body>
+    </html>
+  `;
+
+  assert.deepEqual(extractCircuitStatsFromHtml(html), {
+    firstGrandPrix: "1950",
+    numberOfLaps: "52",
+    circuitLength: "5.89",
+    raceDistance: "306.20",
+    lapRecord: "1:27.097",
+    lapRecordBy: "Max Verstappen",
+    lapRecordOn: "2020",
+  });
+});
+
+test("buildCircuitStatsKey resolves canonical long-form circuit names", () => {
+  assert.equal(
+    buildCircuitStatsKey({
+      circuitShortName: "Miami International Autodrome",
+      countryName: "USA",
+    }),
+    "miami"
+  );
+
+  assert.equal(
+    buildCircuitStatsKey({
+      circuitShortName: "Silverstone Circuit",
+      countryName: "UK",
+    }),
+    "great-britain"
+  );
+
+  assert.equal(
+    buildCircuitStatsKey({
+      circuitShortName: "Las Vegas Strip Street Circuit",
+      countryName: "USA",
+    }),
+    "las-vegas"
+  );
+});
+
 test("buildCircuitImageUrls uses the modern 2026 track art template", () => {
   assert.deepEqual(
     buildCircuitImageUrls("2026", {
@@ -307,22 +367,136 @@ test("buildCircuitImageUrls uses the Great Britain legacy asset for Silverstone"
   );
 });
 
-test("getCircuitStats falls back to N/A when the scrape fails", async () => {
+test("getCircuitStats returns stored metadata for a known round", async () => {
+  const metadata = upsertCircuitStatsRecord(createCircuitMetadataShell(), {
+    year: "2025",
+    round: "1",
+    circuitMeta: {
+      countryName: "Bahrain",
+      circuitShortName: "Bahrain International Circuit",
+    },
+    stats: {
+      firstGrandPrix: "2004",
+      numberOfLaps: "57",
+      circuitLength: "5.41",
+      lapRecord: "1:31.447",
+      lapRecordBy: "Pedro de la Rosa",
+      lapRecordOn: "2005",
+    },
+    updatedAt: "2026-03-20T00:00:00.000Z",
+  });
+
   const stats = await getCircuitStats(
     "2025",
     { countryName: "Bahrain", circuitShortName: "Bahrain International Circuit" },
-    { fetchTextImpl: async () => null }
+    { round: "1", metadata }
+  );
+
+  assert.deepEqual(stats, {
+    firstGrandPrix: "2004",
+    numberOfLaps: "57",
+    circuitLength: "5.41",
+    lapRecord: "1:31.447",
+    lapRecordBy: "Pedro de la Rosa",
+    lapRecordOn: "2005",
+  });
+});
+
+test("getCircuitStats falls back to N/A when metadata is missing", async () => {
+  const stats = await getCircuitStats(
+    "2025",
+    { countryName: "Bahrain", circuitShortName: "Bahrain International Circuit" },
+    { round: "1", metadata: createCircuitMetadataShell() }
   );
 
   assert.deepEqual(stats, {
     firstGrandPrix: "N/A",
     numberOfLaps: "N/A",
     circuitLength: "N/A",
-    raceDistance: "N/A",
     lapRecord: "N/A",
     lapRecordBy: "N/A",
     lapRecordOn: "N/A",
   });
+});
+
+test("getLatestCompletedRound returns the most recent completed round", () => {
+  const raceResultsByRound = new Map([
+    ["1", { results: [{ position: "01" }], raceName: "Bahrain Grand Prix" }],
+    ["2", { results: [{ position: "01" }], raceName: "Saudi Arabian Grand Prix" }],
+    ["3", { results: [], raceName: "Australian Grand Prix" }],
+  ]);
+
+  assert.deepEqual(getLatestCompletedRound(raceResultsByRound), {
+    round: "2",
+    race: { results: [{ position: "01" }], raceName: "Saudi Arabian Grand Prix" },
+  });
+});
+
+test("upsertCircuitStatsRecord stores stats by season and key", () => {
+  const metadata = upsertCircuitStatsRecord(createCircuitMetadataShell(), {
+    year: "2026",
+    round: "2",
+    circuitMeta: {
+      countryName: "China",
+      circuitShortName: "Shanghai",
+    },
+    stats: {
+      firstGrandPrix: "2004",
+      numberOfLaps: "56",
+      circuitLength: "5.45",
+      lapRecord: "1:32.238",
+      lapRecordBy: "Michael Schumacher",
+      lapRecordOn: "2004",
+    },
+    updatedAt: "2026-03-20T00:00:00.000Z",
+  });
+  const record = getStoredCircuitStatsRecord(metadata, {
+    year: "2026",
+    round: "2",
+    circuitMeta: {
+      countryName: "China",
+      circuitShortName: "Shanghai",
+    },
+  });
+
+  assert.equal(metadata.seasons["2026"].lastProcessedRound, 2);
+  assert.equal(record.statsKey, "china");
+  assert.equal(record.lapRecordBy, "Michael Schumacher");
+});
+
+test("hasCircuitStatsChanged detects unchanged and changed stats", () => {
+  const existingRecord = {
+    firstGrandPrix: "1950",
+    numberOfLaps: "52",
+    circuitLength: "5.89",
+    lapRecord: "1:27.097",
+    lapRecordBy: "Max Verstappen",
+    lapRecordOn: "2020",
+  };
+
+  assert.equal(
+    hasCircuitStatsChanged(existingRecord, {
+      firstGrandPrix: "1950",
+      numberOfLaps: "52",
+      circuitLength: "5.89",
+      lapRecord: "1:27.097",
+      lapRecordBy: "Max Verstappen",
+      lapRecordOn: "2020",
+    }),
+    false
+  );
+
+  assert.equal(
+    hasCircuitStatsChanged(existingRecord, {
+      firstGrandPrix: "1950",
+      numberOfLaps: "52",
+      circuitLength: "5.89",
+      lapRecord: "1:26.999",
+      lapRecordBy: "Lando Norris",
+      lapRecordOn: "2026",
+    }),
+    true
+  );
 });
 
 test("getTeamCarImageUrl uses the modern template for 2026 team cars", async () => {
