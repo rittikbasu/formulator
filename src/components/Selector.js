@@ -41,15 +41,15 @@ const Selector = ({ availableYears, latestAvailableYear }) => {
   };
 
   return (
-    <div className="max-w-sm mx-auto md:pb-16 pt-4 px-8">
-      <div className="relative grid grid-cols-2 gap-1 text-zinc-300 bg-zinc-900/60 webkit-backdrop-blur-lg border border-zinc-800/60 rounded-xl">
-        <div className="absolute inset-0 flex justify-center">
-          <div className="w-px bg-zinc-800/60 self-stretch"></div>
+    <div className="px-8 pt-4 mx-auto max-w-sm sm:pb-4">
+      <div className="grid relative grid-cols-2 gap-1 rounded-xl border text-zinc-300 bg-zinc-900/60 webkit-backdrop-blur-lg border-zinc-800/60">
+        <div className="flex absolute inset-0 justify-center">
+          <div className="self-stretch w-px bg-zinc-800/60"></div>
         </div>
 
         <select
           id="year"
-          className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
+          className="z-10 py-2 w-full text-sm font-medium text-center bg-transparent appearance-none cursor-pointer outline-none md:text-base hover:text-red-500"
           value={selectedYear}
           onChange={(event) =>
             navigateTo(selectedCategory, event.target.value)
@@ -65,7 +65,7 @@ const Selector = ({ availableYears, latestAvailableYear }) => {
 
         <select
           id="category"
-          className="appearance-none bg-transparent py-2 text-sm md:text-base font-medium text-center outline-none w-full z-10 hover:text-red-500 cursor-pointer"
+          className="z-10 py-2 w-full text-sm font-medium text-center bg-transparent appearance-none cursor-pointer outline-none md:text-base hover:text-red-500"
           value={selectedCategory}
           onChange={(event) =>
             navigateTo(event.target.value, selectedYear)
