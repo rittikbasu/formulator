@@ -292,6 +292,21 @@ test("buildCircuitImageUrls uses the official 2026 Catalunya and Spa-Francorcham
   );
 });
 
+test("buildCircuitImageUrls uses the Great Britain legacy asset for Silverstone", () => {
+  assert.deepEqual(
+    buildCircuitImageUrls("2025", {
+      countryName: "United Kingdom",
+      circuitShortName: "Silverstone",
+    }),
+    {
+      primary:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png",
+      fallback:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png",
+    }
+  );
+});
+
 test("getCircuitStats falls back to N/A when the scrape fails", async () => {
   const stats = await getCircuitStats(
     "2025",

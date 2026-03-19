@@ -10,6 +10,8 @@ const CIRCUIT_IMAGE_OVERRIDES = {
   "Yas Marina Circuit": "Abu_Dhabi",
   "Monte Carlo": "Monaco",
   Imola: "Emilia_Romagna",
+  Silverstone: "Great_Britain",
+  "United Kingdom": "Great_Britain",
 };
 const MODERN_CIRCUIT_IMAGE_SLUGS = {
   Bahrain: "sakhir",
@@ -75,7 +77,9 @@ const CIRCUIT_STATS_SLUGS = {
   Canada: "canada",
   Spain: "spain",
   Austria: "austria",
+  Great_Britain: "great-britain",
   "Great Britain": "great-britain",
+  "United Kingdom": "great-britain",
   Belgium: "belgium",
   Hungary: "hungary",
   Netherlands: "netherlands",
@@ -116,7 +120,8 @@ export function buildCircuitImageUrls(year, { circuitShortName, countryName }) {
   const normalizedCircuitName =
     CIRCUIT_IMAGE_OVERRIDES[circuitShortName] ||
     circuitShortName.replace(/\s+/g, "_");
-  const normalizedCountryName = countryName.replace(/\s+/g, "_");
+  const normalizedCountryName =
+    (CIRCUIT_IMAGE_OVERRIDES[countryName] || countryName).replace(/\s+/g, "_");
 
   return {
     primary: `https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/${normalizedCircuitName}_Circuit.png`,
