@@ -21,7 +21,7 @@ const DEFAULT_TEAM_COLOR = "#71717a";
 const DRIVER_HEADSHOT_PLACEHOLDER =
   "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png";
 const DRIVER_AVATAR_LAYOUTS = {
-  legacy: "object-cover object-[50%_10%] scale-[1.3]",
+  legacy: "origin-top object-cover object-[50%_0%] scale-[1.24]",
   modern: "origin-top object-cover object-[52%_0%] scale-[1.9]",
 };
 const HOVER_QUERY = "(hover: hover) and (pointer: fine)";
@@ -33,6 +33,18 @@ function normalizeDriverName(value) {
     .trim()
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ");
+}
+
+function getDisplayTeamName(value) {
+  if (value === "Red Bull Racing") {
+    return "Red Bull";
+  }
+
+  if (value === "Haas F1 Team") {
+    return "Haas";
+  }
+
+  return value;
 }
 
 const Teams = ({ teams, year }) => {
@@ -268,7 +280,9 @@ export async function getStaticProps(context) {
       (left, right) =>
         Number(left.driver_number || 999) - Number(right.driver_number || 999)
     );
-    const displayName = teamDrivers[0]?.team_name || standing.constructorName;
+    const displayName = getDisplayTeamName(
+      teamDrivers[0]?.team_name || standing.constructorName
+    );
     const carImageUrl = await getTeamCarImageUrl({
       year,
       teamKey,
