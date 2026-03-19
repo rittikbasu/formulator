@@ -9,8 +9,8 @@ I built this Formula 1 client because of my newfound love for F1 racing. Stay up
 - Driver standings
 - Constructor standings
 - Race cards and race results
-- Circuit statistics and imagery
-- Automatic season rollover to the latest season with data
+- Circuit stats
+- Historical data (upto 2023 currently)
 
 ## Tech Stack
 
