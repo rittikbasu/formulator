@@ -3,7 +3,9 @@ export {
   getConstructorStandings,
   getDriverStandings,
   getLatestAvailableSeason,
+  getSeasonQualifyingResults,
   getSeasonRaceResults,
+  getSeasonSprintResults,
 } from "./jolpica.mjs";
 export {
   getOpenF1Drivers,

@@ -69,6 +69,18 @@ function normalizeResult(result) {
   };
 }
 
+function normalizeQualifyingResult(result) {
+  return {
+    position: String(result.position || "").padStart(2, "0"),
+    driver: `${result.Driver.givenName} ${result.Driver.familyName}`,
+    driverCode: result.Driver.code,
+    constructor: result.Constructor.name,
+    q1: result.Q1 || "N/A",
+    q2: result.Q2 || "N/A",
+    q3: result.Q3 || "N/A",
+  };
+}
+
 async function getJolpicaPayload(path, options = {}) {
   const fetchJsonImpl = options.fetchJsonImpl || fetchJson;
   return fetchJsonImpl(`${JOLPICA_BASE_URL}${path}`);
@@ -227,6 +239,114 @@ export async function getSeasonRaceResults(year, options = {}) {
     } while (total !== null && offset < total);
 
     return racesByRound;
+  };
+
+  if (options.fetchJsonImpl) {
+    return loader();
+  }
+
+  return withCache(cacheKey, getCacheTtlMs(year), loader);
+}
+
+export async function getSeasonQualifyingResults(year, options = {}) {
+  const cacheKey = `jolpica:season-qualifying:${year}`;
+  const loader = async () => {
+    const fetchJsonImpl = options.fetchJsonImpl || fetchJson;
+    const limit = 100;
+    let offset = 0;
+    let total = null;
+    const qualifyingByRound = new Map();
+
+    do {
+      const payload = await fetchJsonImpl(
+        `${JOLPICA_BASE_URL}/ergast/f1/${year}/qualifying.json?limit=${limit}&offset=${offset}`
+      );
+
+      if (!payload) {
+        break;
+      }
+
+      const raceTable = getRaceTable(payload);
+      total = Number(payload?.MRData?.total || 0);
+
+      raceTable.forEach((race) => {
+        const round = String(race.round || "");
+        const existingEntry = qualifyingByRound.get(round) || {
+          round,
+          results: [],
+        };
+
+        (race.QualifyingResults || []).forEach((result) => {
+          existingEntry.results.push(normalizeQualifyingResult(result));
+        });
+
+        existingEntry.results.sort(
+          (left, right) => Number(left.position) - Number(right.position)
+        );
+        qualifyingByRound.set(round, existingEntry);
+      });
+
+      offset += limit;
+    } while (total !== null && offset < total);
+
+    return qualifyingByRound;
+  };
+
+  if (options.fetchJsonImpl) {
+    return loader();
+  }
+
+  return withCache(cacheKey, getCacheTtlMs(year), loader);
+}
+
+export async function getSeasonSprintResults(year, options = {}) {
+  const cacheKey = `jolpica:season-sprint:${year}`;
+  const loader = async () => {
+    const fetchJsonImpl = options.fetchJsonImpl || fetchJson;
+    const limit = 100;
+    let offset = 0;
+    let total = null;
+    const sprintByRound = new Map();
+
+    do {
+      const payload = await fetchJsonImpl(
+        `${JOLPICA_BASE_URL}/ergast/f1/${year}/sprint.json?limit=${limit}&offset=${offset}`
+      );
+
+      if (!payload) {
+        break;
+      }
+
+      const raceTable = getRaceTable(payload);
+      total = Number(payload?.MRData?.total || 0);
+
+      raceTable.forEach((race) => {
+        const round = String(race.round || "");
+        const existingEntry = sprintByRound.get(round) || {
+          round,
+          results: [],
+          fastestDriver: null,
+        };
+
+        (race.SprintResults || []).forEach((result) => {
+          const normalized = normalizeResult(result);
+          existingEntry.results.push(normalized);
+
+          if (result.FastestLap?.rank === "1") {
+            existingEntry.fastestDriver = normalized.driver;
+          }
+        });
+
+        existingEntry.results.sort(
+          (left, right) => Number(left.position) - Number(right.position)
+        );
+        sprintByRound.set(round, existingEntry);
+      });
+
+      offset += limit;
+    } while (total !== null && offset < total);
+
+    return sprintByRound;
   };
 
   if (options.fetchJsonImpl) {

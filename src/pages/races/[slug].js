@@ -10,7 +10,9 @@ import {
   getCircuitStats,
   getLatestAvailableSeason,
   getOpenF1RaceSessions,
+  getSeasonQualifyingResults,
   getSeasonRaceResults,
+  getSeasonSprintResults,
   getSeasonRevalidateSeconds,
   isSupportedSeason,
 } from "@/lib/f1/index.mjs";
@@ -198,12 +200,14 @@ export async function getStaticProps(context) {
     };
   }
 
-  const [availableYears, latestAvailableYear, sessions, raceResultsByRound] =
+  const [availableYears, latestAvailableYear, sessions, raceResultsByRound, qualifyingByRound, sprintByRound] =
     await Promise.all([
       getAvailableSeasons(),
       getLatestAvailableSeason(),
       getOpenF1RaceSessions(year),
       getSeasonRaceResults(year),
+      getSeasonQualifyingResults(year),
+      getSeasonSprintResults(year),
     ]);
 
   if (sessions.length === 0 && raceResultsByRound.size === 0) {
@@ -289,6 +293,9 @@ export async function getStaticProps(context) {
         lapRecordOn: circuitStats.lapRecordOn,
         results: raceData?.results || [],
         fastestDriver: raceData?.fastestDriver || null,
+        qualifyingResults: qualifyingByRound.get(roundKey)?.results || [],
+        sprintResults: sprintByRound.get(roundKey)?.results || [],
+        sprintFastestDriver: sprintByRound.get(roundKey)?.fastestDriver || null,
       };
     })
   );

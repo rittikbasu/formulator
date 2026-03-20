@@ -41,3 +41,21 @@ body {
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
+
+.mask-fade-top {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0px,
+    rgba(0, 0, 0, 0.78) 10px,
+    rgba(0, 0, 0, 0.92) 22px,
+    black 34px
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.6) 0px,
+    rgba(0, 0, 0, 0.78) 10px,
+    rgba(0, 0, 0, 0.92) 22px,
+    black 34px
+  );
+}
+
