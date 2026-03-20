@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -29,6 +30,9 @@ const f1Font = localFont({
 export default function App({ Component, pageProps }) {
   const [revolve, setRevolve] = useState(true);
   const [showContent, setShowContent] = useState(false);
+  const logoWrapperRef = useRef(null);
+  const contentRef = useRef(null);
+  const containerRef = useRef(null);
   const availableYears = pageProps.availableYears || [];
   const latestAvailableYear =
     pageProps.latestAvailableYear ||
@@ -38,8 +42,42 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setRevolve(false);
-      setShowContent(true);
+      const logoEl = logoWrapperRef.current;
+      const containerEl = containerRef.current;
+      const contentEl = contentRef.current;
+
+      // FIRST: record positions before layout change
+      const logoFirstY = logoEl.getBoundingClientRect().top;
+      const containerFirstBottom = containerEl.getBoundingClientRect().bottom;
+
+      // Snap layout instantly (no CSS transition on min-height)
+      flushSync(() => {
+        setRevolve(false);
+        setShowContent(true);
+      });
+
+      // LAST: record new positions
+      const logoLastY = logoEl.getBoundingClientRect().top;
+      const contentLastY = contentEl.getBoundingClientRect().top;
+
+      // INVERT + PLAY via Web Animations API (no timing race)
+      const options = { duration: 1000, easing: "ease-in-out" };
+
+      logoEl.animate(
+        [
+          { transform: `translateY(${logoFirstY - logoLastY}px)` },
+          { transform: "translateY(0)" },
+        ],
+        options
+      );
+
+      contentEl.animate(
+        [
+          { transform: `translateY(${containerFirstBottom - contentLastY}px)` },
+          { transform: "translateY(0)" },
+        ],
+        options
+      );
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -70,31 +108,34 @@ export default function App({ Component, pageProps }) {
           <div className="absolute pointer-events-none inset-0 flex items-center justify-center bg-black [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
         </div>
         <div
+          ref={containerRef}
           className={clsx(
-            "flex justify-center items-center transition-all duration-1000 ease-in-out",
+            "flex justify-center items-center",
             showContent ? "min-h-16" : "min-h-screen"
           )}
         >
-          <Link
-            href={revolve ? "#" : `/teams/${latestAvailableYear}`}
-            className="flex justify-center my-12 mt-8 md:my-16"
-            onClick={!revolve ? handleImageClick : undefined}
-          >
-            <Image
-              src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
-              className={clsx(
-                "transition duration-1000",
-                revolve && " animate-revolve -hue-rotate-90"
-              )}
-              alt="F1 logo"
-              height={100}
-              width={200}
-              unoptimized={true}
-              priority
-            />
-          </Link>
+          <div ref={logoWrapperRef}>
+            <Link
+              href={revolve ? "#" : `/teams/${latestAvailableYear}`}
+              className="flex justify-center my-12 mt-8 md:my-16"
+              onClick={!revolve ? handleImageClick : undefined}
+            >
+              <Image
+                src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
+                className={clsx(
+                  "transition duration-1000",
+                  revolve && " animate-revolve -hue-rotate-90"
+                )}
+                alt="F1 logo"
+                height={100}
+                width={200}
+                unoptimized={true}
+                priority
+              />
+            </Link>
+          </div>
         </div>
-        <div className={clsx(showContent ? "block" : "hidden")}>
+        <div ref={contentRef} className={clsx(showContent ? "block" : "hidden")}>
           {shouldShowSelector && (
             <div className="sticky top-0 z-20 w-full">
               <Selector

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import clsx from "clsx";
@@ -49,6 +49,10 @@ function getDisplayTeamName(value) {
 
 const Teams = ({ teams, year }) => {
   const [selectedTeamKey, setSelectedTeamKey] = useState(null);
+
+  useEffect(() => {
+    setSelectedTeamKey(null);
+  }, [year]);
 
   const toggleTeamCard = (teamKey, isInteractive) => {
     if (!isInteractive || typeof window === "undefined") {
