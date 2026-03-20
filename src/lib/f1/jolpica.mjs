@@ -299,6 +299,59 @@ export async function getSeasonQualifyingResults(year, options = {}) {
   return withCache(cacheKey, getCacheTtlMs(year), loader);
 }
 
+export async function getSeasonSchedule(year, options = {}) {
+  const cacheKey = `jolpica:season-schedule:${year}`;
+  const loader = async () => {
+    const payload = await getJolpicaPayload(
+      `/ergast/f1/${year}.json?limit=30`,
+      options
+    );
+    const races = getRaceTable(payload);
+    const scheduleByRound = new Map();
+
+    const SESSION_FIELDS = [
+      { key: "FirstPractice", name: "Practice 1" },
+      { key: "SecondPractice", name: "Practice 2" },
+      { key: "ThirdPractice", name: "Practice 3" },
+      { key: "Sprint", name: "Sprint" },
+      { key: "Qualifying", name: "Qualifying" },
+    ];
+
+    races.forEach((race) => {
+      const round = String(race.round || "");
+      const sessions = [];
+
+      SESSION_FIELDS.forEach(({ key, name }) => {
+        const session = race[key];
+        if (session?.date && session?.time) {
+          sessions.push({
+            name,
+            dateTime: `${session.date}T${session.time}`,
+          });
+        }
+      });
+
+      if (race.date && race.time) {
+        sessions.push({
+          name: "Race",
+          dateTime: `${race.date}T${race.time}`,
+        });
+      }
+
+      sessions.sort((a, b) => a.dateTime.localeCompare(b.dateTime));
+      scheduleByRound.set(round, { raceName: race.raceName || null, sessions });
+    });
+
+    return scheduleByRound;
+  };
+
+  if (options.fetchJsonImpl) {
+    return loader();
+  }
+
+  return withCache(cacheKey, getCacheTtlMs(year), loader);
+}
+
 export async function getSeasonSprintResults(year, options = {}) {
   const cacheKey = `jolpica:season-sprint:${year}`;
   const loader = async () => {

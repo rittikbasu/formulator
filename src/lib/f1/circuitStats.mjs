@@ -123,6 +123,8 @@ const CIRCUIT_STATS_SLUGS = {
   Losail_International_Circuit: "qatar",
   "Abu Dhabi": "abu-dhabi",
   UAE: "abu-dhabi",
+  "United Arab Emirates": "abu-dhabi",
+  United_Arab_Emirates: "abu-dhabi",
   Yas_Marina_Circuit: "abu-dhabi",
   "Las Vegas": "las-vegas",
   Las_Vegas_Strip_Street_Circuit: "las-vegas",

@@ -13,12 +13,43 @@ import {
 import { FaEquals } from "react-icons/fa6";
 import { IoIosArrowRoundBack } from "react-icons/io";
 
-const CircuitModal = ({ circuit, onClose }) => {
+const SESSION_DURATION_MIN = {
+  "Practice 1": 60,
+  "Practice 2": 60,
+  "Practice 3": 60,
+  "Qualifying": 60,
+  "Sprint": 60,
+  "Race": 120,
+};
+
+function computeCountdownParts(ms) {
+  if (ms <= 0) return null;
+  const totalSeconds = Math.floor(ms / 1000);
+  return {
+    days: Math.floor(totalSeconds / 86400),
+    hours: Math.floor((totalSeconds % 86400) / 3600),
+    minutes: Math.floor((totalSeconds % 3600) / 60),
+    seconds: totalSeconds % 60,
+  };
+}
+
+const TimeBox = ({ value, label }) => (
+  <div className="flex flex-col items-center bg-zinc-800/50 rounded-xl px-3 py-2.5 min-w-[3.5rem] md:min-w-[4rem]">
+    <span className="text-2xl md:text-3xl font-mono font-bold text-zinc-100 tabular-nums">
+      {String(value).padStart(2, "0")}
+    </span>
+    <span className="text-[0.6rem] text-zinc-500 uppercase tracking-widest mt-0.5">{label}</span>
+  </div>
+);
+
+const CircuitModal = ({ circuit, onClose, isNextRace }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [titleInView, setTitleInView] = useState(true);
   const [selectedSession, setSelectedSession] = useState("race");
+  const [countdownParts, setCountdownParts] = useState(null);
+  const [countdownName, setCountdownName] = useState(null);
   const titleRef = useRef(null);
   const scrollRef = useRef(null);
 
@@ -43,6 +74,28 @@ const CircuitModal = ({ circuit, onClose }) => {
   }, [circuit]);
 
   useEffect(() => {
+    const schedule = circuit?.schedule;
+    if (!schedule?.length) return;
+
+    const tick = () => {
+      const now = Date.now();
+      const next = schedule.find((s) => new Date(s.dateTime).getTime() > now);
+      if (!next) {
+        setCountdownParts(null);
+        setCountdownName(null);
+        return;
+      }
+      const ms = new Date(next.dateTime).getTime() - now;
+      setCountdownName(next.name);
+      setCountdownParts(computeCountdownParts(ms));
+    };
+
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [circuit]);
+
+  useEffect(() => {
     if (!titleRef.current || !scrollRef.current) return;
     const observer = new IntersectionObserver(
       ([entry]) => setTitleInView(entry.isIntersecting),
@@ -59,12 +112,6 @@ const CircuitModal = ({ circuit, onClose }) => {
     }, 500);
   };
 
-  const handleBackdropClick = (e) => {
-    if (e.target === e.currentTarget) {
-      handleClose();
-    }
-  };
-
   if (!circuit) return null;
 
   const sessions = [];
@@ -74,22 +121,25 @@ const CircuitModal = ({ circuit, onClose }) => {
 
   const activeSessionValue = sessions.find((s) => s.value === selectedSession)?.value ?? sessions[0]?.value ?? null;
 
+  const open = isVisible && !isClosing;
+
   return (
-    <div
-      className={`fixed inset-0 bg-black webkit-backdrop-blur-lg bg-opacity-50 z-50 flex justify-center pt-8 md:items-center transition-opacity duration-300 ${
-        isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
-      }`}
-      style={{
-        transition: "transform 500ms ease-in-out",
-        transform: isVisible
-          ? isClosing
-            ? "translateY(100%)"
-            : "translateY(0)"
-          : "translateY(100%)",
-      }}
-      onClick={handleBackdropClick}
-    >
-      <div className="bg-zinc-800/50 webkit-backdrop-blur-lg md:rounded-3xl rounded-t-3xl max-w-4xl md:h-5/6 w-full overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-50">
+      {/* Backdrop — fades independently */}
+      <div
+        className={`absolute inset-0 bg-black/50 webkit-backdrop-blur transition-opacity duration-300 ${
+          open ? "opacity-100" : "opacity-0"
+        }`}
+        onClick={handleClose}
+      />
+
+      {/* Modal panel — slides up on mobile, scales in on desktop */}
+      <div className="absolute inset-0 flex justify-end flex-col md:justify-center md:items-center pointer-events-none">
+      <div className={`pointer-events-auto bg-zinc-800/50 webkit-backdrop-blur-lg md:rounded-3xl rounded-t-3xl max-w-4xl max-h-[calc(100%-2rem)] md:max-h-none md:h-5/6 w-full overflow-hidden flex flex-col modal-ease transition-all duration-500 ${
+          open
+            ? "translate-y-0 md:scale-100 md:opacity-100"
+            : "translate-y-full md:translate-y-0 md:scale-95 md:opacity-0"
+        }`}>
 
         {/* Header — outside scroll area, no sticky needed */}
         <div className="flex-shrink-0 px-4 md:px-8 pt-4 pb-2 md:pt-5 md:pb-4">
@@ -175,6 +225,79 @@ const CircuitModal = ({ circuit, onClose }) => {
               </p>
             </div>
           </div>
+
+          {sessions.length === 0 && circuit.schedule?.length > 0 && (
+            <div className="mt-6">
+              {isNextRace && countdownParts && (
+                <div className="rounded-2xl overflow-hidden bg-zinc-900/80 border border-zinc-800/50 mb-6">
+                  <div className="h-px bg-gradient-to-r from-transparent via-red-600/50 to-transparent" />
+                  <div className="px-5 py-5 md:py-6 md:flex md:items-center md:justify-between md:gap-8">
+                    <p className="text-xs text-zinc-500 uppercase tracking-widest text-center md:text-left mb-4 md:mb-0 md:whitespace-nowrap">
+                      <span className="block text-zinc-200 font-semibold text-sm md:text-base normal-case tracking-normal mb-0.5">{countdownName}</span>
+                      starts in
+                    </p>
+                    <div className="flex justify-center md:justify-end gap-2 md:gap-3">
+                      {countdownParts.days > 0 && <TimeBox value={countdownParts.days} label="days" />}
+                      <TimeBox value={countdownParts.hours} label="hrs" />
+                      <TimeBox value={countdownParts.minutes} label="min" />
+                      <TimeBox value={countdownParts.seconds} label="sec" />
+                    </div>
+                  </div>
+                </div>
+              )}
+              <h3 className="text-sm text-zinc-500 uppercase tracking-widest mb-3">Race Weekend Schedule</h3>
+              <div className="flex flex-col">
+                {circuit.schedule.map((session) => {
+                  const dt = new Date(session.dateTime);
+                  const isPast = dt.getTime() < Date.now();
+                  const isNext = session.name === countdownName && !isPast;
+                  const dayNum = dt.toLocaleDateString(undefined, { day: "numeric" });
+                  const dayName = dt.toLocaleDateString(undefined, { weekday: "short" }).toUpperCase();
+                  const timeOpts = { hour: "numeric", minute: "2-digit", hour12: true };
+                  const timeStr = dt.toLocaleTimeString(undefined, timeOpts);
+                  const durationMin = SESSION_DURATION_MIN[session.name];
+                  const endStr = durationMin
+                    ? new Date(dt.getTime() + durationMin * 60 * 1000).toLocaleTimeString(undefined, timeOpts)
+                    : null;
+                  return (
+                    <div
+                      key={session.dateTime}
+                      className={clsx(
+                        "flex items-center gap-4 px-3 py-3 rounded-xl transition-colors",
+                        isNext && "bg-zinc-800/60",
+                        isPast && !isNext && "opacity-35"
+                      )}
+                    >
+                      {/* Date column */}
+                      <div className="w-9 shrink-0 text-center">
+                        <p className={clsx("text-xl font-bold leading-none tabular-nums", isNext ? "text-zinc-100" : "text-zinc-400")}>{dayNum}</p>
+                        <p className="text-[0.6rem] tracking-wider text-zinc-600 mt-0.5">{dayName}</p>
+                      </div>
+
+                      {/* Divider line */}
+                      <div className={clsx("w-px self-stretch", isNext ? "bg-red-500/60" : "bg-zinc-700/50")} />
+
+                      {/* Session info */}
+                      <div className="flex-1 min-w-0">
+                        <p className={clsx("text-sm md:text-base font-semibold leading-tight", isNext ? "text-zinc-100" : "text-zinc-300")}>
+                          {session.name}
+                        </p>
+                        <p className="text-xs md:text-sm text-zinc-500 mt-0.5 font-mono">
+                          {timeStr}{endStr && <span> – {endStr}</span>}
+                        </p>
+                      </div>
+
+                      {isNext && isNextRace && (
+                        <span className="shrink-0 text-[0.6rem] uppercase tracking-widest text-red-400 border border-red-500/30 rounded-full px-2 py-0.5">
+                          Next
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {sessions.length > 0 && (
             <div className="mt-6 pt-6 border-t border-zinc-700/30">
@@ -300,6 +423,7 @@ const CircuitModal = ({ circuit, onClose }) => {
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

@@ -42,6 +42,10 @@ body {
   backdrop-filter: blur(10px);
 }
 
+.modal-ease {
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
 .mask-fade-top {
   -webkit-mask-image: linear-gradient(
     to bottom,

@@ -5,6 +5,7 @@ export {
   getLatestAvailableSeason,
   getSeasonQualifyingResults,
   getSeasonRaceResults,
+  getSeasonSchedule,
   getSeasonSprintResults,
 } from "./jolpica.mjs";
 export {
