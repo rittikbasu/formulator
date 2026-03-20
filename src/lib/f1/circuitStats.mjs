@@ -19,7 +19,9 @@ const CIRCUIT_IMAGE_OVERRIDES = {
   "Monte Carlo": "Monaco",
   Imola: "Emilia_Romagna",
   Silverstone: "Great_Britain",
+  "Silverstone Circuit": "Great_Britain",
   "United Kingdom": "Great_Britain",
+  "Baku City Circuit": "Baku",
 };
 const MODERN_CIRCUIT_IMAGE_SLUGS = {
   Bahrain: "sakhir",

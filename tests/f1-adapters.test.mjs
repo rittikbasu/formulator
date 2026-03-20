@@ -365,6 +365,34 @@ test("buildCircuitImageUrls uses the Great Britain legacy asset for Silverstone"
         "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png",
     }
   );
+
+  assert.deepEqual(
+    buildCircuitImageUrls("2025", {
+      countryName: "UK",
+      circuitShortName: "Silverstone Circuit",
+    }),
+    {
+      primary:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Great_Britain_Circuit.png",
+      fallback:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/UK_Circuit.png",
+    }
+  );
+});
+
+test("buildCircuitImageUrls uses the Baku legacy asset for Baku City Circuit", () => {
+  assert.deepEqual(
+    buildCircuitImageUrls("2025", {
+      countryName: "Azerbaijan",
+      circuitShortName: "Baku City Circuit",
+    }),
+    {
+      primary:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Baku_Circuit.png",
+      fallback:
+        "https://www.formula1.com/content/dam/fom-website/2018-redesign-assets/Circuit%20maps%2016x9/Azerbaijan_Circuit.png",
+    }
+  );
 });
 
 test("getCircuitStats returns stored metadata for a known round", async () => {

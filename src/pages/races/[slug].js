@@ -51,6 +51,29 @@ const DISPLAY_COUNTRY_ALIASES = {
   "United Arab Emirates": "UAE",
 };
 
+function formatRaceWeekendDate(dateValue) {
+  if (!dateValue) {
+    return null;
+  }
+
+  const raceDate = new Date(dateValue);
+
+  if (Number.isNaN(raceDate.getTime())) {
+    return null;
+  }
+
+  const raceDay = raceDate.getUTCDate();
+  const startDate = new Date(raceDate);
+  startDate.setUTCDate(raceDay - 2);
+  const startDay = startDate.getUTCDate();
+  const month = raceDate.toLocaleDateString("en-US", {
+    month: "short",
+    timeZone: "UTC",
+  });
+
+  return `${startDay} - ${raceDay} ${month}`;
+}
+
 function getRaceDisplayLabel({ session, raceData, circuitMeta }) {
   const statsKey = buildCircuitStatsKey(circuitMeta);
   const location =
@@ -236,7 +259,9 @@ export async function getStaticProps(context) {
       }
 
       const sessionDate = session?.date_start || session?.date_end;
-      const raceDate = raceData?.raceDate
+      const raceDate = isCurrentSeason
+        ? formatRaceWeekendDate(sessionDate || raceData?.raceDate)
+        : raceData?.raceDate
         ? raceData.raceDate
         : sessionDate
         ? new Date(sessionDate).toLocaleDateString("en-US", {
