@@ -9,6 +9,7 @@ import clsx from "clsx";
 import "@/styles/globals.css";
 
 import Selector from "@/components/Selector";
+import ScrollToTopCar from "@/components/ScrollToTopCar";
 
 const f1Font = localFont({
   src: [
@@ -139,6 +140,7 @@ export default function App({ Component, pageProps }) {
         </div>
       </div>
       <Analytics />
+      <ScrollToTopCar />
     </>
   );
 }

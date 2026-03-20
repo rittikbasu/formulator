@@ -24,6 +24,14 @@ module.exports = {
       },
       animation: {
         revolve: "revolve-side-to-side 1s ease-in-out",
+        "car-appear": "car-appear 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards",
+        "car-idle": "car-idle 2.5s ease-in-out infinite",
+        "car-windup": "car-windup 0.15s ease-in forwards",
+        "car-launch": "car-launch 0.45s cubic-bezier(0.5, 0, 1, 0.5) forwards",
+        "car-disappear": "car-disappear 0.3s ease-in forwards",
+        "exhaust-trail": "exhaust-trail 0.45s ease-out forwards",
+        "speed-lines": "speed-lines 0.4s ease-out forwards",
+        "chevron-pulse": "chevron-pulse 1.2s ease-in-out infinite",
       },
       keyframes: {
         "revolve-side-to-side": {
@@ -33,6 +41,41 @@ module.exports = {
           to: {
             transform: "rotateY(360deg)",
           },
+        },
+        "car-appear": {
+          "0%": { opacity: "0", transform: "translateY(30px) scale(0.9)" },
+          "100%": { opacity: "1", transform: "translateY(0) scale(1)" },
+        },
+        "car-idle": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-3px)" },
+        },
+        "car-windup": {
+          "0%": { transform: "translateY(0) rotateX(0deg)" },
+          "100%": { transform: "translateY(2px) rotateX(8deg)" },
+        },
+        "car-launch": {
+          "0%": { opacity: "1", transform: "translateY(0) scale(1)" },
+          "15%": { opacity: "1", transform: "translateY(0) scale(1.15)" },
+          "100%": { opacity: "0", transform: "translateY(-150vh) scale(0.8)" },
+        },
+        "car-disappear": {
+          "0%": { opacity: "1", transform: "translateY(0)" },
+          "100%": { opacity: "0", transform: "translateY(20px)" },
+        },
+        "exhaust-trail": {
+          "0%": { opacity: "0", height: "0px" },
+          "20%": { opacity: "0.8", height: "60px" },
+          "100%": { opacity: "0", height: "120px" },
+        },
+        "speed-lines": {
+          "0%": { opacity: "0", transform: "translateY(-20px)" },
+          "20%": { opacity: "0.6" },
+          "100%": { opacity: "0", transform: "translateY(80px)" },
+        },
+        "chevron-pulse": {
+          "0%, 100%": { opacity: "0.15" },
+          "50%": { opacity: "0.9" },
         },
       },
     },

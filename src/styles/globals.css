@@ -46,6 +46,96 @@ body {
   transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
 }
 
+/* === Scroll-to-Top F1 Car === */
+.car-button {
+  perspective: 400px;
+  will-change: transform, opacity;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+@keyframes chevron-pulse {
+  0%   { opacity: 0.12; filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+  7%   { opacity: 1;    filter: drop-shadow(0 0 6px rgba(255,255,255,0.9)); }
+  32%  { opacity: 0.12; filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+  100% { opacity: 0.12; filter: drop-shadow(0 0 0px rgba(255,255,255,0)); }
+}
+
+.car-chevron {
+  opacity: 0.12;
+  animation: chevron-pulse 1.8s linear infinite;
+}
+
+.car-button:hover .car-chevron {
+  animation-duration: 1.2s;
+}
+
+.car-button:hover .car-glow {
+  opacity: 0.6;
+  transform: scale(1.2);
+}
+
+.car-glow {
+  background: radial-gradient(ellipse at 50% 80%, rgba(239, 68, 68, 0.5) 0%, transparent 70%);
+  filter: blur(6px);
+  opacity: 0.3;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: scale(1);
+  pointer-events: none;
+}
+
+.car-glow-active {
+  opacity: 0.9;
+  background: radial-gradient(ellipse at 50% 80%, rgba(251, 146, 60, 0.8) 0%, rgba(239, 68, 68, 0.5) 40%, transparent 70%);
+}
+
+.car-exhaust {
+  width: 14px;
+  background: linear-gradient(to bottom, rgba(251, 146, 60, 0.9), rgba(239, 68, 68, 0.6), transparent);
+  border-radius: 0 0 8px 8px;
+  transform-origin: top center;
+}
+
+.car-speed-lines.active::before,
+.car-speed-lines.active::after,
+.car-speed-lines.active span::before {
+  content: "";
+  position: absolute;
+  width: 1.5px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+  animation: speed-lines 0.4s ease-out forwards;
+}
+
+.car-speed-lines.active::before {
+  left: 20%;
+  top: 0;
+  animation-delay: 0.02s;
+}
+
+.car-speed-lines.active::after {
+  right: 20%;
+  top: 10%;
+  animation-delay: 0.05s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .car-button,
+  .animate-car-appear,
+  .animate-car-idle,
+  .animate-car-windup,
+  .animate-car-launch,
+  .animate-car-disappear {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* === End Scroll-to-Top F1 Car === */
+
 .mask-fade-top {
   -webkit-mask-image: linear-gradient(
     to bottom,
