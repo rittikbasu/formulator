@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
-import CircuitModal from "@/components/CircuitModal";
+const CircuitModal = dynamic(() => import("@/components/CircuitModal"), { ssr: false });
 import { buildCircuitStatsKey } from "@/lib/f1/circuitStats.mjs";
 import {
   getAvailableSeasons,
@@ -18,8 +19,6 @@ import {
   isSupportedSeason,
 } from "@/lib/f1/index.mjs";
 
-const CIRCUIT_PLACEHOLDER_URL =
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/991px-Placeholder_view_vector.svg.png";
 
 const DISPLAY_LOCATION_BY_STATS_KEY = {
   bahrain: "Sakhir",
@@ -183,9 +182,6 @@ const Races = ({ circuits, year }) => {
                   width={400}
                   height={225}
                   unoptimized={true}
-                  onError={(event) => {
-                    event.target.src = CIRCUIT_PLACEHOLDER_URL;
-                  }}
                   className="rounded-md"
                 />
                 {circuit.round === nextRaceRound && (

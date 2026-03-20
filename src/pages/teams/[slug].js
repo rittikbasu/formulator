@@ -18,8 +18,7 @@ import {
 } from "@/lib/f1/index.mjs";
 
 const DEFAULT_TEAM_COLOR = "#71717a";
-const DRIVER_HEADSHOT_PLACEHOLDER =
-  "https://www.state.gov/wp-content/uploads/2022/09/placeholder-headshot.png";
+const DRIVER_HEADSHOT_PLACEHOLDER = "/driver-placeholder.webp";
 const DRIVER_AVATAR_LAYOUTS = {
   legacy: "origin-top object-cover object-[50%_0%] scale-[1.24]",
   modern: "origin-top object-cover object-[52%_0%] scale-[1.9]",

@@ -1,7 +1,7 @@
 export const MIN_SUPPORTED_SEASON = 2023;
 export const CURRENT_YEAR = new Date().getFullYear();
 export const CURRENT_SEASON_REVALIDATE_SECONDS = 5 * 60;
-export const ARCHIVE_SEASON_REVALIDATE_SECONDS = false;
+export const ARCHIVE_SEASON_REVALIDATE_SECONDS = Number.MAX_SAFE_INTEGER;
 export const DEFAULT_FETCH_TIMEOUT_MS = 5000;
 
 function normalizeBaseUrl(value, fallback) {

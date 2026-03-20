@@ -14,8 +14,7 @@ import {
 } from "@/lib/f1/index.mjs";
 
 const DEFAULT_TEAM_COLOR = "#71717a";
-const DRIVER_PLACEHOLDER_URL =
-  "https://ik.imagekit.io/zwcfsadeijm/ALL_RACING_VENDORS_ARE_THE_EXACT_SAME_GUY_OMG_CLONING_t3uganMky9_oQYDIA3_j_ahgB5uJzp.webp?updatedAt=1716287153953";
+const DRIVER_PLACEHOLDER_URL = "/driver-placeholder.webp";
 const DRIVER_IMAGE_LAYOUTS = {
   legacy: {
     frameClassName: "-top-2 h-[160px] w-[140px]",

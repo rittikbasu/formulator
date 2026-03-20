@@ -157,16 +157,18 @@ export async function getConstructorStandings(year, options = {}) {
 export async function getAvailableSeasons(options = {}) {
   const cacheKey = "jolpica:available-seasons";
   const loader = async () => {
-    const seasons = [];
-
-    for (let year = CURRENT_YEAR; year >= MIN_SUPPORTED_SEASON; year -= 1) {
-      const standings = await getDriverStandings(String(year), options);
-      if (standings.length > 0) {
-        seasons.push(String(year));
-      }
-    }
-
-    return seasons;
+    const years = Array.from(
+      { length: CURRENT_YEAR - MIN_SUPPORTED_SEASON + 1 },
+      (_, i) => CURRENT_YEAR - i
+    );
+    const results = await Promise.all(
+      years.map((year) =>
+        getDriverStandings(String(year), options).then((standings) =>
+          standings.length > 0 ? String(year) : null
+        )
+      )
+    );
+    return results.filter(Boolean);
   };
 
   if (options.fetchJsonImpl) {

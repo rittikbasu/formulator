@@ -121,7 +121,7 @@ export default function App({ Component, pageProps }) {
               onClick={!revolve ? handleImageClick : undefined}
             >
               <Image
-                src="https://logodownload.org/wp-content/uploads/2016/11/formula-1-logo-7.png"
+                src="/f1-logo.webp"
                 className={clsx(
                   "transition duration-1000",
                   revolve && " animate-revolve -hue-rotate-90"
@@ -129,7 +129,6 @@ export default function App({ Component, pageProps }) {
                 alt="F1 logo"
                 height={100}
                 width={200}
-                unoptimized={true}
                 priority
               />
             </Link>
