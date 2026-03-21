@@ -1,6 +1,7 @@
-import Head from "next/head";
 import Image from "next/image";
 import clsx from "clsx";
+
+import Meta from "@/components/Meta";
 
 import {
   getAvailableSeasons,
@@ -35,12 +36,14 @@ function normalizeDriverName(value) {
     .replace(/[^a-z0-9]+/g, " ");
 }
 
-const Drivers = ({ standings }) => {
+const Drivers = ({ standings, year }) => {
   return (
     <>
-      <Head>
-        <title>Formulator - All things Formula 1</title>
-      </Head>
+      <Meta
+        title={`F1 ${year} Driver Standings | Formulator`}
+        description={`${year} Formula 1 driver standings, points, and team affiliations.`}
+        path={`/drivers/${year}`}
+      />
 
       <div className="grid grid-cols-1 gap-10 mt-8 md:grid-cols-2 lg:grid-cols-3 md:gap-14">
         {standings.map((driver) => {
@@ -181,6 +184,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       standings: standingsWithColors,
+      year,
       availableYears,
       latestAvailableYear,
     },

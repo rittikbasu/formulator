@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import clsx from "clsx";
 
 import Badge from "@/components/Bagde";
+import Meta from "@/components/Meta";
 import {
   getAvailableSeasons,
   getCanonicalTeamKey,
@@ -69,9 +69,11 @@ const Teams = ({ teams, year }) => {
 
   return (
     <>
-      <Head>
-        <title>Formulator - All things Formula 1</title>
-      </Head>
+      <Meta
+        title={`F1 ${year} Constructor Standings | Formulator`}
+        description={`${year} Formula 1 constructor standings, team details, and driver lineups.`}
+        path={`/teams/${year}`}
+      />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 mb-12 justify-center">
         {teams.map((team, index) => {
           const teamColor = team.teamColor || DEFAULT_TEAM_COLOR;

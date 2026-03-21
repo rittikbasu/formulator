@@ -95,7 +95,7 @@ export default function App({ Component, pageProps }) {
       <Head>
         <link rel="icon" href="/favicon.png" type="image/png" />
         <link rel="apple-touch-icon" href="/apple-icon.png" type="image/png" />
-        <title>Formulator - All Things Formula 1</title>
+        <title key="title">Formulator - All Things Formula 1</title>
       </Head>
       <div className={clsx("max-w-7xl mx-auto", f1Font.className)}>
         <div

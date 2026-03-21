@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import Head from "next/head";
 import Image from "next/image";
 import dynamic from "next/dynamic";
+import Meta from "@/components/Meta";
+import { buildCircuitStatsKey } from "@/lib/f1/circuitStats.mjs";
 
 const CircuitModal = dynamic(() => import("@/components/CircuitModal"), { ssr: false });
-import { buildCircuitStatsKey } from "@/lib/f1/circuitStats.mjs";
 import {
   getAvailableSeasons,
   getCircuitImageUrl,
@@ -125,9 +125,11 @@ const Races = ({ circuits, year }) => {
 
   return (
     <>
-      <Head>
-        <title>Formulator - All things Formula 1</title>
-      </Head>
+      <Meta
+        title={`F1 ${year} Race Calendar & Results | Formulator`}
+        description={`${year} Formula 1 race calendar, circuit details, and results.`}
+        path={`/races/${year}`}
+      />
 
       <div className="grid grid-cols-1 gap-14 mt-8 mb-11 md:grid-cols-2 lg:grid-cols-3">
         {circuits.map((circuit) => {
