@@ -1,7 +1,7 @@
 import Head from "next/head";
 
 const BASE_URL = "https://formulator.rittik.io";
-const OG_IMAGE = "/og-image.png";
+const OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export default function Meta({ title, description, path }) {
   const url = `${BASE_URL}${path}`;
