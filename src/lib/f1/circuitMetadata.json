@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 2,
-      "lastUpdatedAt": "2026-03-19T22:22:02.205Z",
+      "lastProcessedRound": 3,
+      "lastUpdatedAt": "2026-03-30T13:50:03.463Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -885,6 +885,18 @@
           "lapRecord": "1:32.238",
           "lapRecordBy": "Michael Schumacher",
           "lapRecordOn": "2004"
+        },
+        "japan": {
+          "round": "3",
+          "statsKey": "japan",
+          "countryName": "Japan",
+          "circuitShortName": "Suzuka Circuit",
+          "firstGrandPrix": "1987",
+          "numberOfLaps": "53",
+          "circuitLength": "5.81",
+          "lapRecord": "1:30.965",
+          "lapRecordBy": "Kimi Antonelli",
+          "lapRecordOn": "2025"
         }
       }
     }
