@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 3,
-      "lastUpdatedAt": "2026-03-30T13:50:03.463Z",
+      "lastProcessedRound": 4,
+      "lastUpdatedAt": "2026-05-04T14:19:08.314Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -897,6 +897,18 @@
           "lapRecord": "1:30.965",
           "lapRecordBy": "Kimi Antonelli",
           "lapRecordOn": "2025"
+        },
+        "miami": {
+          "round": "4",
+          "statsKey": "miami",
+          "countryName": "USA",
+          "circuitShortName": "Miami International Autodrome",
+          "firstGrandPrix": "2022",
+          "numberOfLaps": "57",
+          "circuitLength": "5.41",
+          "lapRecord": "1:29.708",
+          "lapRecordBy": "Max Verstappen",
+          "lapRecordOn": "2023"
         }
       }
     }
