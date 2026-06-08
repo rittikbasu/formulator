@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 5,
-      "lastUpdatedAt": "2026-05-25T15:21:18.290Z",
+      "lastProcessedRound": 6,
+      "lastUpdatedAt": "2026-06-08T16:06:38.859Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -921,6 +921,18 @@
           "lapRecord": "1:13.078",
           "lapRecordBy": "Valtteri Bottas",
           "lapRecordOn": "2019"
+        },
+        "monaco": {
+          "round": "6",
+          "statsKey": "monaco",
+          "countryName": "Monaco",
+          "circuitShortName": "Circuit de Monaco",
+          "firstGrandPrix": "1950",
+          "numberOfLaps": "78",
+          "circuitLength": "3.34",
+          "lapRecord": "1:12.909",
+          "lapRecordBy": "Lewis Hamilton",
+          "lapRecordOn": "2021"
         }
       }
     }
