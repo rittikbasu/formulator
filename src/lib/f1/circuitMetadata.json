@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 6,
-      "lastUpdatedAt": "2026-06-08T16:06:38.859Z",
+      "lastProcessedRound": 7,
+      "lastUpdatedAt": "2026-06-15T17:23:36.485Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -933,6 +933,18 @@
           "lapRecord": "1:12.909",
           "lapRecordBy": "Lewis Hamilton",
           "lapRecordOn": "2021"
+        },
+        "spain": {
+          "round": "7",
+          "statsKey": "spain",
+          "countryName": "Spain",
+          "circuitShortName": "Circuit de Barcelona-Catalunya",
+          "firstGrandPrix": "2026",
+          "numberOfLaps": "57",
+          "circuitLength": "5.42",
+          "lapRecord": "N/A",
+          "lapRecordBy": "N/A",
+          "lapRecordOn": "N/A"
         }
       }
     }
