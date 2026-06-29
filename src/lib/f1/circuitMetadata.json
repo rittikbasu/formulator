@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 7,
-      "lastUpdatedAt": "2026-06-15T17:23:36.485Z",
+      "lastProcessedRound": 8,
+      "lastUpdatedAt": "2026-06-29T15:58:43.313Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -945,6 +945,18 @@
           "lapRecord": "N/A",
           "lapRecordBy": "N/A",
           "lapRecordOn": "N/A"
+        },
+        "austria": {
+          "round": "8",
+          "statsKey": "austria",
+          "countryName": "Austria",
+          "circuitShortName": "Red Bull Ring",
+          "firstGrandPrix": "1970",
+          "numberOfLaps": "71",
+          "circuitLength": "4.33",
+          "lapRecord": "1:07.924",
+          "lapRecordBy": "Oscar Piastri",
+          "lapRecordOn": "2025"
         }
       }
     }
