@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 8,
-      "lastUpdatedAt": "2026-06-29T15:58:43.313Z",
+      "lastProcessedRound": 9,
+      "lastUpdatedAt": "2026-07-06T15:47:38.601Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -957,6 +957,18 @@
           "lapRecord": "1:07.924",
           "lapRecordBy": "Oscar Piastri",
           "lapRecordOn": "2025"
+        },
+        "great-britain": {
+          "round": "9",
+          "statsKey": "great-britain",
+          "countryName": "UK",
+          "circuitShortName": "Silverstone Circuit",
+          "firstGrandPrix": "1950",
+          "numberOfLaps": "52",
+          "circuitLength": "5.89",
+          "lapRecord": "1:27.097",
+          "lapRecordBy": "Max Verstappen",
+          "lapRecordOn": "2020"
         }
       }
     }
