@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 9,
-      "lastUpdatedAt": "2026-07-06T15:47:38.601Z",
+      "lastProcessedRound": 10,
+      "lastUpdatedAt": "2026-07-20T14:21:20.953Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -969,6 +969,18 @@
           "lapRecord": "1:27.097",
           "lapRecordBy": "Max Verstappen",
           "lapRecordOn": "2020"
+        },
+        "belgium": {
+          "round": "10",
+          "statsKey": "belgium",
+          "countryName": "Belgium",
+          "circuitShortName": "Circuit de Spa-Francorchamps",
+          "firstGrandPrix": "1950",
+          "numberOfLaps": "44",
+          "circuitLength": "7.00",
+          "lapRecord": "1:44.701",
+          "lapRecordBy": "Sergio Perez",
+          "lapRecordOn": "2024"
         }
       }
     }
