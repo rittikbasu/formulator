@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 10,
-      "lastUpdatedAt": "2026-07-20T14:21:20.953Z",
+      "lastProcessedRound": 11,
+      "lastUpdatedAt": "2026-07-27T14:50:09.752Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -981,6 +981,18 @@
           "lapRecord": "1:44.701",
           "lapRecordBy": "Sergio Perez",
           "lapRecordOn": "2024"
+        },
+        "hungary": {
+          "round": "11",
+          "statsKey": "hungary",
+          "countryName": "Hungary",
+          "circuitShortName": "Hungaroring",
+          "firstGrandPrix": "1986",
+          "numberOfLaps": "70",
+          "circuitLength": "4.38",
+          "lapRecord": "1:16.627",
+          "lapRecordBy": "Lewis Hamilton",
+          "lapRecordOn": "2020"
         }
       }
     }
