@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const BASE_URL = "https://formulator.rittik.io";
+const BASE_URL = "https://formulator.rittik.fyi";
 const OG_IMAGE = `${BASE_URL}/og-image.png`;
 
 export default function Meta({ title, description, path }) {
@@ -8,6 +8,7 @@ export default function Meta({ title, description, path }) {
   return (
     <Head>
       <title key="title">{title}</title>
+      <link rel="canonical" href={url} />
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />

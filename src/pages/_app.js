@@ -147,11 +147,11 @@ export default function App({ Component, pageProps }) {
             <Component {...pageProps} />
             <footer className={clsx("mt-20 sm:mt-24 text-center text-base text-zinc-400", f1Font.className)}>
         <a
-          href="https://rittik.io"
+          href="https://rittik.fyi"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex gap-1 items-center transition-colors group hover:text-zinc-200"
-          aria-label="Visit rittik.io"
+          aria-label="Visit rittik.fyi"
         >
           made with
           <svg
