@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 11,
-      "lastUpdatedAt": "2026-07-27T14:50:09.752Z",
+      "lastProcessedRound": 12,
+      "lastUpdatedAt": "2026-08-24T13:01:49.624Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -993,6 +993,18 @@
           "lapRecord": "1:16.627",
           "lapRecordBy": "Lewis Hamilton",
           "lapRecordOn": "2020"
+        },
+        "netherlands": {
+          "round": "12",
+          "statsKey": "netherlands",
+          "countryName": "Netherlands",
+          "circuitShortName": "Circuit Park Zandvoort",
+          "firstGrandPrix": "1952",
+          "numberOfLaps": "72",
+          "circuitLength": "4.26",
+          "lapRecord": "1:11.097",
+          "lapRecordBy": "Lewis Hamilton",
+          "lapRecordOn": "2021"
         }
       }
     }
