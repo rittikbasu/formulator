@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 13,
-      "lastUpdatedAt": "2026-09-07T17:37:58.894Z",
+      "lastProcessedRound": 14,
+      "lastUpdatedAt": "2026-09-14T17:59:13.287Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -935,16 +935,16 @@
           "lapRecordOn": "2021"
         },
         "spain": {
-          "round": "7",
+          "round": "14",
           "statsKey": "spain",
           "countryName": "Spain",
-          "circuitShortName": "Circuit de Barcelona-Catalunya",
+          "circuitShortName": "Madring",
           "firstGrandPrix": "2026",
           "numberOfLaps": "57",
-          "circuitLength": "5.42",
-          "lapRecord": "N/A",
-          "lapRecordBy": "N/A",
-          "lapRecordOn": "N/A"
+          "circuitLength": "5.41",
+          "lapRecord": "1:35.587",
+          "lapRecordBy": "George Russell",
+          "lapRecordOn": "2026"
         },
         "austria": {
           "round": "8",
