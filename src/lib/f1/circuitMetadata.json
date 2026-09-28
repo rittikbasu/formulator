@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 14,
-      "lastUpdatedAt": "2026-09-14T17:59:13.287Z",
+      "lastProcessedRound": 15,
+      "lastUpdatedAt": "2026-09-28T19:31:17.576Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1017,6 +1017,18 @@
           "lapRecord": "1:20.901",
           "lapRecordBy": "Lando Norris",
           "lapRecordOn": "2025"
+        },
+        "azerbaijan": {
+          "round": "15",
+          "statsKey": "azerbaijan",
+          "countryName": "Azerbaijan",
+          "circuitShortName": "Baku City Circuit",
+          "firstGrandPrix": "2016",
+          "numberOfLaps": "51",
+          "circuitLength": "6.00",
+          "lapRecord": "1:43.009",
+          "lapRecordBy": "Charles Leclerc",
+          "lapRecordOn": "2019"
         }
       }
     }
