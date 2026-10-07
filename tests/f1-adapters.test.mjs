@@ -430,6 +430,26 @@ test("getCircuitStats returns stored metadata for a known round", async () => {
   });
 });
 
+test("getCircuitStats returns sourced stats for Bahrain Grand Prix in Malaysia", async () => {
+  const stats = await getCircuitStats(
+    "2026",
+    {
+      countryName: "Malaysia",
+      circuitShortName: "Sepang International Circuit",
+    },
+    { round: "16" }
+  );
+
+  assert.deepEqual(stats, {
+    firstGrandPrix: "1999",
+    numberOfLaps: "56",
+    circuitLength: "5.54",
+    lapRecord: "1:34.080",
+    lapRecordBy: "Sebastian Vettel",
+    lapRecordOn: "2017",
+  });
+});
+
 test("getCircuitStats falls back to N/A when metadata is missing", async () => {
   const stats = await getCircuitStats(
     "2025",
