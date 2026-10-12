@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 16,
-      "lastUpdatedAt": "2026-10-07T11:48:19.000Z",
+      "lastProcessedRound": 17,
+      "lastUpdatedAt": "2026-10-12T21:09:37.960Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1042,6 +1042,18 @@
           "lapRecordBy": "Sebastian Vettel",
           "lapRecordOn": "2017",
           "sourceUrl": "https://www.formula1.com/en/latest/article/circuit-guide-everything-you-need-to-know-about-the-sepang-international-circuit.2KTLvyxBXmwVftSJxmYeZ2"
+        },
+        "singapore": {
+          "round": "17",
+          "statsKey": "singapore",
+          "countryName": "Singapore",
+          "circuitShortName": "Marina Bay Street Circuit",
+          "firstGrandPrix": "2008",
+          "numberOfLaps": "62",
+          "circuitLength": "4.93",
+          "lapRecord": "1:33.808",
+          "lapRecordBy": "Lewis Hamilton",
+          "lapRecordOn": "2025"
         }
       }
     }
