@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 17,
-      "lastUpdatedAt": "2026-10-12T21:09:37.960Z",
+      "lastProcessedRound": 18,
+      "lastUpdatedAt": "2026-10-26T18:34:04.331Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1054,6 +1054,18 @@
           "lapRecord": "1:33.808",
           "lapRecordBy": "Lewis Hamilton",
           "lapRecordOn": "2025"
+        },
+        "united-states": {
+          "round": "18",
+          "statsKey": "united-states",
+          "countryName": "USA",
+          "circuitShortName": "Circuit of the Americas",
+          "firstGrandPrix": "2012",
+          "numberOfLaps": "56",
+          "circuitLength": "5.51",
+          "lapRecord": "1:36.169",
+          "lapRecordBy": "Charles Leclerc",
+          "lapRecordOn": "2019"
         }
       }
     }
