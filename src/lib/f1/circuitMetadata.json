@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 18,
-      "lastUpdatedAt": "2026-10-26T18:34:04.331Z",
+      "lastProcessedRound": 19,
+      "lastUpdatedAt": "2026-11-02T21:37:40.897Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1066,6 +1066,18 @@
           "lapRecord": "1:36.169",
           "lapRecordBy": "Charles Leclerc",
           "lapRecordOn": "2019"
+        },
+        "mexico": {
+          "round": "19",
+          "statsKey": "mexico",
+          "countryName": "Mexico",
+          "circuitShortName": "Autódromo Hermanos Rodríguez",
+          "firstGrandPrix": "1963",
+          "numberOfLaps": "71",
+          "circuitLength": "4.30",
+          "lapRecord": "1:17.774",
+          "lapRecordBy": "Valtteri Bottas",
+          "lapRecordOn": "2021"
         }
       }
     }
