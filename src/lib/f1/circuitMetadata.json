@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 19,
-      "lastUpdatedAt": "2026-11-02T21:37:40.897Z",
+      "lastProcessedRound": 20,
+      "lastUpdatedAt": "2026-11-09T22:10:39.564Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1078,6 +1078,18 @@
           "lapRecord": "1:17.774",
           "lapRecordBy": "Valtteri Bottas",
           "lapRecordOn": "2021"
+        },
+        "brazil": {
+          "round": "20",
+          "statsKey": "brazil",
+          "countryName": "Brazil",
+          "circuitShortName": "Autódromo José Carlos Pace",
+          "firstGrandPrix": "1973",
+          "numberOfLaps": "71",
+          "circuitLength": "4.31",
+          "lapRecord": "1:10.540",
+          "lapRecordBy": "Valtteri Bottas",
+          "lapRecordOn": "2018"
         }
       }
     }
