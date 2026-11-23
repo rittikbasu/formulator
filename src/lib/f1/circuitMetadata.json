@@ -859,8 +859,8 @@
       }
     },
     "2026": {
-      "lastProcessedRound": 20,
-      "lastUpdatedAt": "2026-11-09T22:10:39.564Z",
+      "lastProcessedRound": 21,
+      "lastUpdatedAt": "2026-11-23T23:41:32.421Z",
       "circuits": {
         "australia": {
           "round": "1",
@@ -1090,6 +1090,18 @@
           "lapRecord": "1:10.540",
           "lapRecordBy": "Valtteri Bottas",
           "lapRecordOn": "2018"
+        },
+        "las-vegas": {
+          "round": "21",
+          "statsKey": "las-vegas",
+          "countryName": "USA",
+          "circuitShortName": "Las Vegas Strip Street Circuit",
+          "firstGrandPrix": "2023",
+          "numberOfLaps": "50",
+          "circuitLength": "6.20",
+          "lapRecord": "1:33.365",
+          "lapRecordBy": "Max Verstappen",
+          "lapRecordOn": "2025"
         }
       }
     }
